@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría de Conexión - Báifo Store</title>
+    <style>
+        :root {
+            --vino: #641722;
+            --negro: #0b0b0d;
+            --negro-2: #111114;
+            --blanco: #f5f5f5;
+            --gris: #a8a8ad;
+            --dorado: #c8a96b;
+            --verde: #25D366;
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem 1rem;
+            background: linear-gradient(180deg, #09090b 0%, #101013 100%);
+            color: var(--blanco);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .panel-card {
+            background: var(--negro-2);
+            border: 1px solid rgba(255,255,255,.07);
+            border-top: 4px solid var(--vino);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 12px 35px rgba(0,0,0,.35);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        h1 span { color: var(--dorado); }
+
+        p.sub {
+            color: var(--gris);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .data-group {
+            background: #0a0a0c;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--dorado);
+            text-align: left;
+        }
+
+        .data-label {
+            font-size: 0.75rem;
+            color: var(--gris);
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .data-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            word-break: break-all;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: rgba(37, 211, 102, 0.1);
+            color: var(--verde);
+        }
+
+        .loading {
+            color: var(--gris);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel-card">
+        <h1>Báifo <span>IP Tracker</span></h1>
+        <p class="sub">Auditoría de red en tiempo real</p>
+
+        <div class="data-group">
+            <div class="data-label">Dirección IP Pública</div>
+            <div id="ip" class="data-value loading">Detectando...</div>
+        </div>
+
+        <div class="data-group">
+            <div class="data-label">Ubicación / Proveedor</div>
+            <div id="location" class="data-value loading">Localizando...</div>
+        </div>
+
+        <div class="data-group">
+            <div class="data-label">Dispositivo y Sistema</div>
+            <div id="user-agent" class="data-value" style="font-size: 0.9rem;">Cargando...</div>
+        </div>
+
+        <div class="status">● Sistema Activo en GitHub</div>
+    </div>
+
+    <script>
+        // 1. Detectar el sistema operativo y navegador del usuario de forma nativa
+        document.getElementById('user-agent').textContent = navigator.userAgentData 
+            ? navigator.userAgentData.brands.map(b => b.brand).join(', ') + ' (' + navigator.platform + ')'
+            : navigator.userAgent;
+
+        // 2. Consultar una API gratuita y segura (ipapi.co) para extraer IP, país, ciudad y proveedor de internet (ISP)
+        fetch('https://ipapi.co')
+            .then(response => {
+                if (!response.ok) throw new Error('Error al conectar con el servidor de IPs');
+                return response.json();
+            })
+            .then(data => {
+                // Inyectar la IP detectada
+                const ipEl = document.getElementById('ip');
+                ipEl.textContent = data.ip;
+                ipEl.classList.remove('loading');
+
+                // Inyectar Ciudad, Región, País y la compañía de internet (Org)
+                const locEl = document.getElementById('location');
+                locEl.innerHTML = `${data.city}, ${data.region} (${data.country_name})<br><span style="font-size:0.85rem; color:#a8a8ad; font-weight:normal;">Proveedor: ${data.org}</span>`;
+                locEl.classList.remove('loading');
+            })
+            .catch(error => {
+                document.getElementById('ip').textContent = "Error al obtener datos";
+                document.getElementById('location').textContent = "Apaga tu bloqueador de anuncios (AdBlock) e intenta de nuevo.";
+                console.error(error);
+            });
+    </script>
+
+</body>
+</html>
