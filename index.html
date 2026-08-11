@@ -4,7 +4,7 @@
 
 <head>
 
-```
+
 <!-- Google Tag Manager -->
 <script>
     (function(w,d,s,l,i){
@@ -361,21 +361,35 @@
     ========================= */
 
     .contenedor-buscador {
+        position: relative;
         max-width: 620px;
         margin: 2rem auto 0;
         padding: 0 1rem;
     }
 
+    .contenedor-buscador::before {
+        content: "🔍";
+        position: absolute;
+        left: 1.85rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        opacity: .8;
+        pointer-events: none;
+    }
+
     .input-buscador {
         width: 100%;
-        padding: 1rem 1.15rem;
+        padding: 1.05rem 1.15rem 1.05rem 2.9rem;
         border-radius: 10px;
-        border: 1px solid rgba(255,255,255,.1);
+        border: 1.5px solid rgba(200,169,107,.35);
         outline: none;
-        background: #151518;
+        background: #17171b;
         color: #fff;
-        font-size: .95rem;
-        box-shadow: 0 8px 25px rgba(0,0,0,.25);
+        font-size: 1rem;
+        box-shadow:
+            0 8px 25px rgba(0,0,0,.3),
+            0 0 0 3px rgba(100,23,34,.1);
         transition:
             border-color .25s ease,
             box-shadow .25s ease,
@@ -383,13 +397,13 @@
     }
 
     .input-buscador::placeholder {
-        color: #77777d;
+        color: #9c9ca2;
     }
 
     .input-buscador:focus {
-        border-color: rgba(132,35,52,.8);
+        border-color: rgba(200,169,107,.8);
         box-shadow:
-            0 0 0 3px rgba(100,23,34,.15),
+            0 0 0 3px rgba(100,23,34,.22),
             0 12px 30px rgba(0,0,0,.35);
         transform: translateY(-2px);
     }
@@ -461,6 +475,10 @@
     .tarjeta-producto.visible {
         opacity: 1;
         transform: translateY(0) scale(1);
+    }
+
+    .tarjeta-producto {
+        cursor: pointer;
     }
 
     .tarjeta-producto:hover {
@@ -1017,6 +1035,69 @@
     }
 
     /* =========================
+       MODAL DETALLE PRODUCTO
+    ========================= */
+
+    .modal-detalle-producto {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(0,0,0,.86);
+        backdrop-filter: blur(7px);
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .25s ease, visibility .25s ease;
+    }
+
+    .modal-detalle-producto.oculto {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .detalle-caja {
+        position: relative;
+        width: min(94vw,480px);
+        max-height: 92vh;
+        overflow-y: auto;
+        background: #121216;
+        border: 1px solid rgba(255,255,255,.08);
+        border-top: 3px solid var(--vino);
+        border-radius: 17px;
+        box-shadow: 0 30px 80px rgba(0,0,0,.7);
+        animation: modalEntrada .3s ease;
+    }
+
+    .detalle-imagen-contenedor {
+        width: 100%;
+        max-height: 320px;
+        overflow: hidden;
+        border-radius: 17px 17px 0 0;
+    }
+
+    .detalle-imagen-contenedor img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-height: 320px;
+        object-fit: cover;
+    }
+
+    .detalle-info {
+        padding: 1.4rem;
+    }
+
+    .detalle-info h2 {
+        color: #fff;
+        margin-bottom: .4rem;
+        padding-right: 35px;
+    }
+
+    /* =========================
        MENSAJE COPIADO
     ========================= */
 
@@ -1344,6 +1425,7 @@
 
     <div
         class="tarjeta-producto"
+        onclick="abrirDetalleProducto(this)"
         data-producto="Real Madrid (Playera Alternativa Rosa)"
         data-precio="400"
         data-tallas="G, XL, XXL"
@@ -1378,24 +1460,6 @@
                 Diseño alternativo con una presencia distinta y moderna.
             </p>
 
-            <div class="acciones-producto">
-
-                <button
-                    class="btn-instagram"
-                    onclick="abrirPedido(this,'instagram')"
-                >
-                    📸 Instagram
-                </button>
-
-                <button
-                    class="btn-whatsapp"
-                    onclick="abrirPedido(this,'whatsapp')"
-                >
-                    🟢 WhatsApp
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -1405,6 +1469,7 @@
 
     <div
         class="tarjeta-producto"
+        onclick="abrirDetalleProducto(this)"
         data-producto="Real Madrid (Playera Local)"
         data-precio="400"
         data-tallas="S, M, G, XL, XXXL"
@@ -1439,24 +1504,6 @@
                 Una pieza clásica con fuerza visual y gran salida.
             </p>
 
-            <div class="acciones-producto">
-
-                <button
-                    class="btn-instagram"
-                    onclick="abrirPedido(this,'instagram')"
-                >
-                    📸 Instagram
-                </button>
-
-                <button
-                    class="btn-whatsapp"
-                    onclick="abrirPedido(this,'whatsapp')"
-                >
-                    🟢 WhatsApp
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -1466,6 +1513,7 @@
 
     <div
         class="tarjeta-producto"
+        onclick="abrirDetalleProducto(this)"
         data-producto="Noruega Total Black"
         data-precio="415"
         data-tallas="S, M, G, XL, XXL"
@@ -1500,24 +1548,6 @@
                 Modelo sobrio, elegante y perfecto para destacar.
             </p>
 
-            <div class="acciones-producto">
-
-                <button
-                    class="btn-instagram"
-                    onclick="abrirPedido(this,'instagram')"
-                >
-                    📸 Instagram
-                </button>
-
-                <button
-                    class="btn-whatsapp"
-                    onclick="abrirPedido(this,'whatsapp')"
-                >
-                    🟢 WhatsApp
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -1527,6 +1557,7 @@
 
     <div
         class="tarjeta-producto"
+        onclick="abrirDetalleProducto(this)"
         data-producto="Brasil 1994 Retro"
         data-precio="400"
         data-tallas="S, M, G, XL, XXL"
@@ -1561,24 +1592,6 @@
                 Un clásico retro que representa la historia y el estilo de Brasil.
             </p>
 
-            <div class="acciones-producto">
-
-                <button
-                    class="btn-instagram"
-                    onclick="abrirPedido(this,'instagram')"
-                >
-                    📸 Instagram
-                </button>
-
-                <button
-                    class="btn-whatsapp"
-                    onclick="abrirPedido(this,'whatsapp')"
-                >
-                    🟢 WhatsApp
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -1588,6 +1601,7 @@
 
     <div
         class="tarjeta-producto"
+        onclick="abrirDetalleProducto(this)"
         data-producto="Juventus Alternativa VFan"
         data-precio="400"
         data-tallas="S, M, G, XL"
@@ -1622,24 +1636,6 @@
                 Diseño alternativo de la Juventus con un estilo moderno y diferente.
             </p>
 
-            <div class="acciones-producto">
-
-                <button
-                    class="btn-instagram"
-                    onclick="abrirPedido(this,'instagram')"
-                >
-                    📸 Instagram
-                </button>
-
-                <button
-                    class="btn-whatsapp"
-                    onclick="abrirPedido(this,'whatsapp')"
-                >
-                    🟢 WhatsApp
-                </button>
-
-            </div>
-
         </div>
 
     </div>
@@ -1649,6 +1645,7 @@
 
     <div
         class="tarjeta-producto"
+        onclick="abrirDetalleProducto(this)"
         data-producto="Portugal Black Edition"
         data-precio="415"
         data-tallas="S, M, G, XL, XXL, XXXL"
@@ -1682,24 +1679,6 @@
             <p class="detalle-extra">
                 Una edición especial en negro con un diseño elegante y contundente.
             </p>
-
-            <div class="acciones-producto">
-
-                <button
-                    class="btn-instagram"
-                    onclick="abrirPedido(this,'instagram')"
-                >
-                    📸 Instagram
-                </button>
-
-                <button
-                    class="btn-whatsapp"
-                    onclick="abrirPedido(this,'whatsapp')"
-                >
-                    🟢 WhatsApp
-                </button>
-
-            </div>
 
         </div>
 
@@ -1878,6 +1857,77 @@
             src="https://i.postimg.cc/8zhkfkXX/Post-de-Instagram-(34)-Descuentos-Promociones-Fashion-Elegante-Minimalista-Blanco-y-Negro.jpg"
             alt="Promoción de Báifo Football Store"
         >
+
+    </div>
+
+</div>
+
+
+<!-- MODAL DETALLE DE PRODUCTO -->
+
+<div
+    id="modal-detalle-producto"
+    class="modal-detalle-producto oculto"
+>
+
+    <div class="detalle-caja">
+
+        <button
+            type="button"
+            class="cerrar-modal"
+            id="cerrar-detalle-producto"
+        >
+            ×
+        </button>
+
+        <div class="detalle-imagen-contenedor">
+
+            <img
+                id="detalle-imagen"
+                src=""
+                alt=""
+            >
+
+        </div>
+
+        <div class="detalle-info">
+
+            <h2 id="detalle-nombre">
+                Producto
+            </h2>
+
+            <p class="precio" id="detalle-precio">
+                Precio
+            </p>
+
+            <div class="tallas-contenedor">
+                Tallas:
+                <span id="detalle-tallas"></span>
+            </div>
+
+            <p class="detalle-extra" id="detalle-texto">
+                Detalles
+            </p>
+
+            <div class="acciones-producto">
+
+                <button
+                    class="btn-instagram"
+                    id="detalle-btn-instagram"
+                >
+                    📸 Pedir Instagram
+                </button>
+
+                <button
+                    class="btn-whatsapp"
+                    id="detalle-btn-whatsapp"
+                >
+                    🟢 Pedir WhatsApp
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -2157,13 +2207,142 @@
 
 
     /* =========================
+       VARIABLES DETALLE PRODUCTO
+    ========================= */
+
+    const modalDetalleProducto =
+        document.getElementById("modal-detalle-producto");
+
+    const cerrarDetalleProductoBtn =
+        document.getElementById("cerrar-detalle-producto");
+
+    const detalleImagen =
+        document.getElementById("detalle-imagen");
+
+    const detalleNombre =
+        document.getElementById("detalle-nombre");
+
+    const detallePrecio =
+        document.getElementById("detalle-precio");
+
+    const detalleTallas =
+        document.getElementById("detalle-tallas");
+
+    const detalleTexto =
+        document.getElementById("detalle-texto");
+
+    const detalleBotonInstagram =
+        document.getElementById("detalle-btn-instagram");
+
+    const detalleBotonWhatsApp =
+        document.getElementById("detalle-btn-whatsapp");
+
+
+    /* =========================
+       ABRIR DETALLE PRODUCTO
+    ========================= */
+
+    function abrirDetalleProducto(tarjeta) {
+
+        productoSeleccionado = tarjeta;
+
+        const imagenOrigen =
+            tarjeta.querySelector(".imagen-contenedor img");
+
+        detalleImagen.src = imagenOrigen ? imagenOrigen.src : "";
+        detalleImagen.alt = tarjeta.dataset.producto;
+
+        detalleNombre.textContent =
+            tarjeta.dataset.producto;
+
+        detallePrecio.textContent =
+            "$" + tarjeta.dataset.precio + ".00";
+
+        detalleTallas.textContent =
+            tarjeta.dataset.tallas;
+
+        detalleTexto.textContent =
+            tarjeta.dataset.detalle;
+
+        modalDetalleProducto.classList.remove("oculto");
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+    /* =========================
+       CERRAR DETALLE PRODUCTO
+    ========================= */
+
+    function cerrarDetalleProducto() {
+
+        modalDetalleProducto.classList.add("oculto");
+
+        document.body.style.overflow = "";
+
+    }
+
+    cerrarDetalleProductoBtn.addEventListener(
+        "click",
+        cerrarDetalleProducto
+    );
+
+    modalDetalleProducto.addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === modalDetalleProducto) {
+
+                cerrarDetalleProducto();
+
+            }
+
+        }
+    );
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Escape" &&
+                !modalDetalleProducto.classList.contains("oculto")
+            ) {
+
+                cerrarDetalleProducto();
+
+            }
+
+        }
+    );
+
+    detalleBotonInstagram.addEventListener(
+        "click",
+        function() {
+
+            cerrarDetalleProducto();
+            abrirPedido("instagram");
+
+        }
+    );
+
+    detalleBotonWhatsApp.addEventListener(
+        "click",
+        function() {
+
+            cerrarDetalleProducto();
+            abrirPedido("whatsapp");
+
+        }
+    );
+
+
+    /* =========================
        ABRIR PEDIDO
     ========================= */
 
-    function abrirPedido(boton, metodo) {
-
-        productoSeleccionado =
-            boton.closest(".tarjeta-producto");
+    function abrirPedido(metodo) {
 
         const nombre =
             productoSeleccionado.dataset.producto;
@@ -2585,7 +2764,7 @@
     );
 
 </script>
-```
+
 
 </body>
 </html>
