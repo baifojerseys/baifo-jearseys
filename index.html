@@ -838,6 +838,14 @@
         box-shadow: 0 25px 70px rgba(0,0,0,.7);
     }
 
+    .popup-contenido--chico {
+        width: min(72vw,300px);
+    }
+
+    .popup-contenido--chico img {
+        max-height: 65vh;
+    }
+
     .cerrar-popup,
     .cerrar-modal {
         cursor: pointer;
@@ -1893,7 +1901,7 @@
 
 <div id="popup-promocion-2" class="popup-promocion oculto">
 
-    <div class="popup-contenido">
+    <div class="popup-contenido popup-contenido--chico">
 
         <button
             id="cerrar-popup-2"
