@@ -1889,6 +1889,30 @@
 </div>
 
 
+<!-- POPUP PROMOCION 2 (IMAGEN) -->
+
+<div id="popup-promocion-2" class="popup-promocion oculto">
+
+    <div class="popup-contenido">
+
+        <button
+            id="cerrar-popup-2"
+            class="cerrar-popup"
+            aria-label="Cerrar promoción"
+        >
+            ×
+        </button>
+
+        <img
+            src="https://i.postimg.cc/DfC2Y1vX/IMG-0296.jpg"
+            alt="Promoción de Báifo Football Store"
+        >
+
+    </div>
+
+</div>
+
+
 <!-- MODAL DETALLE DE PRODUCTO -->
 
 <div
@@ -2759,13 +2783,18 @@
         );
 
 
+    function cerrarPrimerPopup() {
+
+        popup.classList.add("oculto");
+
+        popup2.classList.remove("oculto");
+
+    }
+
+
     cerrarPopup.addEventListener(
         "click",
-        function() {
-
-            popup.classList.add("oculto");
-
-        }
+        cerrarPrimerPopup
     );
 
 
@@ -2775,7 +2804,7 @@
 
             if (event.target === popup) {
 
-                popup.classList.add("oculto");
+                cerrarPrimerPopup();
 
             }
 
@@ -2792,7 +2821,63 @@
                 !popup.classList.contains("oculto")
             ) {
 
-                popup.classList.add("oculto");
+                cerrarPrimerPopup();
+
+            }
+
+        }
+    );
+
+
+    /* =========================
+       POPUP PROMOCION 2 (IMAGEN)
+    ========================= */
+
+    const popup2 =
+        document.getElementById(
+            "popup-promocion-2"
+        );
+
+    const cerrarPopup2 =
+        document.getElementById(
+            "cerrar-popup-2"
+        );
+
+
+    cerrarPopup2.addEventListener(
+        "click",
+        function() {
+
+            popup2.classList.add("oculto");
+
+        }
+    );
+
+
+    popup2.addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === popup2) {
+
+                popup2.classList.add("oculto");
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Escape" &&
+                !popup2.classList.contains("oculto")
+            ) {
+
+                popup2.classList.add("oculto");
 
             }
 
