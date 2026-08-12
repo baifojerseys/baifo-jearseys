@@ -999,6 +999,51 @@
         min-height: 85px;
     }
 
+    .campo-estampado {
+        display: flex;
+        align-items: flex-start;
+        gap: .6rem;
+        background: #0c0c0f;
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 9px;
+        padding: .8rem;
+        cursor: pointer;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .campo-estampado:hover {
+        border-color: rgba(200,169,107,.4);
+    }
+
+    .campo-estampado input[type="checkbox"] {
+        margin-top: .15rem;
+        width: 18px;
+        height: 18px;
+        accent-color: var(--vino-claro);
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    .campo-estampado-texto strong {
+        display: block;
+        color: #fff;
+        font-size: .88rem;
+    }
+
+    .campo-estampado-texto span {
+        display: block;
+        color: var(--dorado);
+        font-size: .8rem;
+        font-weight: 700;
+        margin-top: .15rem;
+    }
+
+    .campo-estampado-datos {
+        margin-top: .7rem;
+        display: grid;
+        gap: .7rem;
+    }
+
     .boton-generar {
         position: relative;
         overflow: hidden;
@@ -2074,6 +2119,56 @@
 
         <div class="campo-formulario">
 
+            <label
+                for="pedido-estampado"
+                class="campo-estampado"
+            >
+
+                <input
+                    type="checkbox"
+                    id="pedido-estampado"
+                >
+
+                <span class="campo-estampado-texto">
+
+                    <strong>
+                        Estampado nombre y número
+                    </strong>
+
+                    <span>
+                        + $50.00 costo extra
+                    </span>
+
+                </span>
+
+            </label>
+
+            <div
+                id="datos-estampado"
+                class="campo-estampado-datos"
+                style="display:none;"
+            >
+
+                <input
+                    type="text"
+                    id="pedido-estampado-nombre"
+                    placeholder="Nombre para el estampado"
+                >
+
+                <input
+                    type="text"
+                    id="pedido-estampado-numero"
+                    placeholder="Número para el estampado"
+                    inputmode="numeric"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="campo-formulario">
+
             <label for="pedido-comentarios">
                 Comentarios adicionales
             </label>
@@ -2245,6 +2340,18 @@
 
     const pedidoComentarios =
         document.getElementById("pedido-comentarios");
+
+    const pedidoEstampado =
+        document.getElementById("pedido-estampado");
+
+    const datosEstampado =
+        document.getElementById("datos-estampado");
+
+    const pedidoEstampadoNombre =
+        document.getElementById("pedido-estampado-nombre");
+
+    const pedidoEstampadoNumero =
+        document.getElementById("pedido-estampado-numero");
 
     const botonWhatsApp =
         document.getElementById(
@@ -2455,6 +2562,11 @@
         pedidoCantidad.value = "";
         pedidoComentarios.value = "";
 
+        pedidoEstampado.checked = false;
+        pedidoEstampadoNombre.value = "";
+        pedidoEstampadoNumero.value = "";
+        datosEstampado.style.display = "none";
+
 
         if (metodo === "whatsapp") {
 
@@ -2510,6 +2622,24 @@
         productoSeleccionado = null;
 
     }
+
+    pedidoEstampado.addEventListener(
+        "change",
+        function() {
+
+            datosEstampado.style.display =
+                pedidoEstampado.checked ? "grid" : "none";
+
+            if (!pedidoEstampado.checked) {
+
+                pedidoEstampadoNombre.value = "";
+                pedidoEstampadoNumero.value = "";
+
+            }
+
+        }
+    );
+
 
     cerrarModal.addEventListener(
         "click",
@@ -2576,6 +2706,15 @@
         const comentarios =
             pedidoComentarios.value.trim();
 
+        const quiereEstampado =
+            pedidoEstampado.checked;
+
+        const estampadoNombre =
+            pedidoEstampadoNombre.value.trim();
+
+        const estampadoNumero =
+            pedidoEstampadoNumero.value.trim();
+
 
         if (!talla) {
 
@@ -2615,6 +2754,32 @@
         }
 
 
+        if (quiereEstampado && !estampadoNombre) {
+
+            alert(
+                "Por favor escribe el nombre para el estampado."
+            );
+
+            pedidoEstampadoNombre.focus();
+
+            return null;
+
+        }
+
+
+        if (quiereEstampado && !estampadoNumero) {
+
+            alert(
+                "Por favor escribe el número para el estampado."
+            );
+
+            pedidoEstampadoNumero.focus();
+
+            return null;
+
+        }
+
+
         let mensaje =
             "Hola Báifo Football Store 👋\n\n";
 
@@ -2640,6 +2805,17 @@
             "🔢 Cantidad: " +
             cantidad +
             "\n";
+
+        if (quiereEstampado) {
+
+            mensaje +=
+                "🖨️ Estampado nombre y número (+$50): " +
+                estampadoNombre +
+                " #" +
+                estampadoNumero +
+                "\n";
+
+        }
 
         mensaje +=
             "📝 Detalle: " +
