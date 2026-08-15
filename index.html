@@ -1350,7 +1350,264 @@
 
     }
 
+
+
+    /* =========================
+       PANEL ADMINISTRADOR
+    ========================= */
+    #admin-boton {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 9000;
+        border: 1px solid rgba(200,169,107,.45);
+        background: linear-gradient(135deg, var(--vino), var(--vino-oscuro));
+        color: #fff;
+        padding: 11px 15px;
+        border-radius: 999px;
+        font-weight: 800;
+        box-shadow: 0 12px 30px rgba(0,0,0,.45);
+        cursor: pointer;
+        display: none;
+    }
+
+    #admin-boton:hover {
+        transform: translateY(-2px);
+    }
+
+    .admin-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background: rgba(0,0,0,.78);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+    }
+
+    .admin-overlay.visible {
+        display: flex;
+    }
+
+    .admin-caja {
+        width: min(920px, 100%);
+        max-height: 92vh;
+        overflow: auto;
+        background: linear-gradient(180deg,#18181c,#0c0c0f);
+        border: 1px solid rgba(200,169,107,.35);
+        border-radius: 22px;
+        box-shadow: 0 30px 80px rgba(0,0,0,.65);
+        padding: 22px;
+        position: relative;
+    }
+
+    .admin-cerrar {
+        position: absolute;
+        right: 14px;
+        top: 12px;
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 50%;
+        background: #25252a;
+        color: white;
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    .admin-titulo {
+        color: var(--dorado);
+        margin-bottom: 5px;
+    }
+
+    .admin-subtitulo {
+        color: var(--gris);
+        margin-bottom: 20px;
+    }
+
+    .admin-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 12px;
+    }
+
+    .admin-campo {
+        display: grid;
+        gap: 6px;
+    }
+
+    .admin-campo.full {
+        grid-column: 1 / -1;
+    }
+
+    .admin-campo label {
+        color: #ddd;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .admin-campo input,
+    .admin-campo textarea,
+    .admin-campo select {
+        width: 100%;
+        border: 1px solid #34343a;
+        background: #101014;
+        color: white;
+        border-radius: 10px;
+        padding: 11px 12px;
+        outline: none;
+    }
+
+    .admin-campo textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    .admin-campo input:focus,
+    .admin-campo textarea:focus,
+    .admin-campo select:focus {
+        border-color: var(--dorado);
+    }
+
+    .admin-acciones {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 16px;
+    }
+
+    .admin-btn {
+        border: 0;
+        border-radius: 10px;
+        padding: 11px 15px;
+        cursor: pointer;
+        font-weight: 800;
+    }
+
+    .admin-btn.principal {
+        background: var(--vino);
+        color: white;
+    }
+
+    .admin-btn.secundario {
+        background: #29292f;
+        color: white;
+    }
+
+    .admin-btn.peligro {
+        background: #7d202c;
+        color: white;
+    }
+
+    .admin-estado {
+        min-height: 20px;
+        margin-top: 10px;
+        color: #d7d7d7;
+        font-size: 13px;
+    }
+
+    .admin-lista {
+        display: grid;
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .admin-item {
+        display: grid;
+        grid-template-columns: 72px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 10px;
+        background: #121216;
+        border: 1px solid #29292e;
+        border-radius: 13px;
+    }
+
+    .admin-item img {
+        width: 72px;
+        height: 72px;
+        object-fit: cover;
+        border-radius: 9px;
+        background: #222;
+    }
+
+    .admin-item h4 {
+        color: white;
+        margin-bottom: 3px;
+    }
+
+    .admin-item small {
+        color: #aaa;
+    }
+
+    .admin-item-acciones {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .admin-item-acciones button {
+        border: 0;
+        border-radius: 8px;
+        padding: 8px 10px;
+        cursor: pointer;
+        color: white;
+        background: #29292f;
+        font-weight: 700;
+    }
+
+    .admin-login-caja {
+        width: min(430px,100%);
+    }
+
+    .admin-login-caja .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-login-correo {
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #101014;
+        color: var(--dorado);
+        word-break: break-word;
+    }
+
+    .admin-vista {
+        display: none;
+    }
+
+    .admin-vista.visible {
+        display: block;
+    }
+
+    @media (max-width: 650px) {
+        .admin-form-grid {
+            grid-template-columns: 1fr;
+        }
+        .admin-campo.full {
+            grid-column: auto;
+        }
+        .admin-item {
+            grid-template-columns: 60px 1fr;
+        }
+        .admin-item img {
+            width: 60px;
+            height: 60px;
+        }
+        .admin-item-acciones {
+            grid-column: 1 / -1;
+            justify-content: flex-start;
+        }
+    }
+
 </style>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
@@ -1492,6 +1749,90 @@
 
 </section>
 
+
+
+
+<!-- ACCESO ADMINISTRADOR -->
+<button id="admin-boton" type="button">⚙️ Admin</button>
+
+<div id="admin-login" class="admin-overlay" aria-hidden="true">
+    <div class="admin-caja admin-login-caja">
+        <button class="admin-cerrar" type="button" id="admin-login-cerrar">×</button>
+        <h2 class="admin-titulo">🔐 Acceso administrador</h2>
+        <p class="admin-subtitulo">Solo la cuenta autorizada puede administrar el catálogo.</p>
+        <div class="admin-campo">
+            <label>Correo autorizado</label>
+            <div class="admin-login-correo">erickorgz07@gmail.com</div>
+        </div>
+        <div class="admin-campo" style="margin-top:12px;">
+            <label for="admin-password">Contraseña</label>
+            <input id="admin-password" type="password" autocomplete="current-password" placeholder="Tu contraseña de administrador">
+        </div>
+        <div class="admin-acciones">
+            <button class="admin-btn principal" id="admin-login-btn" type="button">Entrar</button>
+        </div>
+        <div id="admin-login-estado" class="admin-estado"></div>
+    </div>
+</div>
+
+<!-- PANEL ADMINISTRADOR -->
+<div id="admin-panel" class="admin-overlay" aria-hidden="true">
+    <div class="admin-caja">
+        <button class="admin-cerrar" type="button" id="admin-panel-cerrar">×</button>
+        <h2 class="admin-titulo">⚙️ Administrar catálogo</h2>
+        <p class="admin-subtitulo">Agrega o modifica jerseys sin tocar el código de la página.</p>
+
+        <div class="admin-vista visible">
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="admin-nombre">Nombre del producto</label>
+                    <input id="admin-nombre" type="text" placeholder="Ej. México Retro 1998">
+                </div>
+                <div class="admin-campo">
+                    <label for="admin-precio">Precio</label>
+                    <input id="admin-precio" type="number" min="0" step="0.01" placeholder="400">
+                </div>
+                <div class="admin-campo">
+                    <label for="admin-tallas">Tallas</label>
+                    <input id="admin-tallas" type="text" placeholder="S, M, G, XL">
+                </div>
+                <div class="admin-campo">
+                    <label for="admin-etiqueta">Etiqueta</label>
+                    <input id="admin-etiqueta" type="text" placeholder="NUEVO / RETRO / MÁS VENDIDO">
+                </div>
+                <div class="admin-campo">
+                    <label for="admin-orden">Orden</label>
+                    <input id="admin-orden" type="number" step="1" placeholder="1">
+                </div>
+                <div class="admin-campo full">
+                    <label for="admin-detalle">Descripción</label>
+                    <textarea id="admin-detalle" placeholder="Descripción que verá el cliente"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="admin-imagen">Imagen del jersey</label>
+                    <input id="admin-imagen" type="file" accept="image/*">
+                    <small style="color:#999;">También puedes dejarla vacía al editar para conservar la imagen actual.</small>
+                </div>
+                <div class="admin-campo">
+                    <label><input id="admin-activo" type="checkbox" checked> Producto visible</label>
+                </div>
+                <div class="admin-campo">
+                    <label><input id="admin-destacado" type="checkbox"> Producto destacado</label>
+                </div>
+            </div>
+
+            <div class="admin-acciones">
+                <button class="admin-btn principal" id="admin-guardar" type="button">➕ Publicar producto</button>
+                <button class="admin-btn secundario" id="admin-cancelar" type="button" style="display:none;">Cancelar edición</button>
+                <button class="admin-btn secundario" id="admin-cerrar-sesion" type="button">Cerrar sesión</button>
+            </div>
+            <div id="admin-estado" class="admin-estado"></div>
+
+            <h3 style="margin-top:26px;color:white;">Productos</h3>
+            <div id="admin-lista" class="admin-lista"></div>
+        </div>
+    </div>
+</div>
 
 <!-- CATALOGO -->
 
@@ -3070,6 +3411,438 @@
 
 </script>
 
+
+
+
+<!-- LÓGICA DEL CATÁLOGO Y ADMINISTRADOR -->
+<script>
+(function () {
+    const SUPABASE_URL = "https://ibucxeeascwhiojipzsz.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vbj7JhKMl5LcdXiovlxndw_ANfm5nZ1";
+    const ADMIN_EMAIL = "erickorgz07@gmail.com";
+
+    const sb = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const catalogo = document.getElementById("catalogo");
+    const buscador = document.getElementById("buscador");
+    const adminBoton = document.getElementById("admin-boton");
+    const loginOverlay = document.getElementById("admin-login");
+    const panelOverlay = document.getElementById("admin-panel");
+    const loginCerrar = document.getElementById("admin-login-cerrar");
+    const panelCerrar = document.getElementById("admin-panel-cerrar");
+    const loginBtn = document.getElementById("admin-login-btn");
+    const loginPassword = document.getElementById("admin-password");
+    const loginEstado = document.getElementById("admin-login-estado");
+    const adminEstado = document.getElementById("admin-estado");
+    const adminLista = document.getElementById("admin-lista");
+    const guardarBtn = document.getElementById("admin-guardar");
+    const cancelarBtn = document.getElementById("admin-cancelar");
+    const cerrarSesionBtn = document.getElementById("admin-cerrar-sesion");
+
+    const fNombre = document.getElementById("admin-nombre");
+    const fPrecio = document.getElementById("admin-precio");
+    const fTallas = document.getElementById("admin-tallas");
+    const fEtiqueta = document.getElementById("admin-etiqueta");
+    const fOrden = document.getElementById("admin-orden");
+    const fDetalle = document.getElementById("admin-detalle");
+    const fImagen = document.getElementById("admin-imagen");
+    const fActivo = document.getElementById("admin-activo");
+    const fDestacado = document.getElementById("admin-destacado");
+
+    let productosDB = [];
+    let productoEditando = null;
+
+    function abrir(overlay) {
+        overlay.classList.add("visible");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+    }
+
+    function cerrar(overlay) {
+        overlay.classList.remove("visible");
+        overlay.setAttribute("aria-hidden", "true");
+        if (!loginOverlay.classList.contains("visible") && !panelOverlay.classList.contains("visible")) {
+            document.body.style.overflow = "";
+        }
+    }
+
+    function normalizar(texto) {
+        return String(texto || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function esc(texto) {
+        return String(texto ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function crearTarjeta(p) {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "tarjeta-producto visible";
+        tarjeta.dataset.producto = p.nombre;
+        tarjeta.dataset.precio = Number(p.precio).toFixed(2).replace(/\.00$/, "");
+        tarjeta.dataset.tallas = (p.tallas || []).join(", ");
+        tarjeta.dataset.detalle = p.detalle || "";
+        tarjeta.dataset.productoId = p.id;
+        tarjeta.onclick = function () {
+            abrirDetalleProducto(tarjeta);
+        };
+
+        tarjeta.innerHTML = `
+            ${p.etiqueta ? `<span class="badge-producto">${esc(p.etiqueta)}</span>` : ""}
+            <div class="imagen-contenedor">
+                <img src="${esc(p.imagen_url)}" alt="${esc(p.nombre)}" loading="lazy">
+            </div>
+            <div class="overlay-galeria"></div>
+            <div class="contenido-galeria">
+                <h3>${esc(p.nombre)}</h3>
+                <p class="precio">$${Number(p.precio).toFixed(2)}</p>
+                <div class="tallas-contenedor">
+                    Tallas:
+                    <span>${esc((p.tallas || []).join(", "))}</span>
+                </div>
+                <p class="detalle-extra">${esc(p.detalle || "")}</p>
+            </div>
+        `;
+        return tarjeta;
+    }
+
+    function renderCatalogo() {
+        const antiguas = catalogo.querySelectorAll(".tarjeta-producto");
+        antiguas.forEach(el => el.remove());
+
+        const texto = normalizar(buscador ? buscador.value : "");
+        let encontrados = 0;
+
+        productosDB.forEach(p => {
+            const tarjeta = crearTarjeta(p);
+            const contenido = normalizar(`${p.nombre} ${p.etiqueta} ${(p.tallas || []).join(" ")} ${p.detalle}`);
+            if (!texto || contenido.includes(texto)) {
+                tarjeta.style.display = "";
+                encontrados++;
+            } else {
+                tarjeta.style.display = "none";
+            }
+            catalogo.appendChild(tarjeta);
+        });
+
+        const sinResultados = document.getElementById("sin-resultados");
+        if (sinResultados) {
+            sinResultados.style.display = texto && encontrados === 0 ? "block" : "none";
+        }
+    }
+
+    async function cargarProductos() {
+        const { data, error } = await sb
+            .from("productos")
+            .select("*")
+            .order("orden", { ascending: true })
+            .order("id", { ascending: true });
+
+        if (error) {
+            console.error(error);
+            const sinResultados = document.getElementById("sin-resultados");
+            if (sinResultados) {
+                sinResultados.textContent = "No se pudo cargar el catálogo. Revisa la configuración de Supabase.";
+                sinResultados.style.display = "block";
+            }
+            return;
+        }
+
+        productosDB = data || [];
+        renderCatalogo();
+        if (esAdmin()) renderListaAdmin();
+    }
+
+    function esAdmin() {
+        return window.__baifoAdmin === true;
+    }
+
+    function mostrarBotonAdmin() {
+        adminBoton.style.display = esAdmin() ? "block" : "none";
+    }
+
+    async function comprobarSesion() {
+        const { data } = await sb.auth.getSession();
+        const session = data && data.session;
+        const email = session && session.user && session.user.email;
+        window.__baifoAdmin = !!session && email && email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+        mostrarBotonAdmin();
+        if (!window.__baifoAdmin && session) {
+            await sb.auth.signOut();
+        }
+        if (window.__baifoAdmin) await cargarProductos();
+    }
+
+    function limpiarFormulario() {
+        productoEditando = null;
+        fNombre.value = "";
+        fPrecio.value = "";
+        fTallas.value = "";
+        fEtiqueta.value = "";
+        fOrden.value = "";
+        fDetalle.value = "";
+        fImagen.value = "";
+        fActivo.checked = true;
+        fDestacado.checked = false;
+        guardarBtn.textContent = "➕ Publicar producto";
+        cancelarBtn.style.display = "none";
+    }
+
+    function editarProducto(p) {
+        productoEditando = p;
+        fNombre.value = p.nombre || "";
+        fPrecio.value = p.precio ?? "";
+        fTallas.value = (p.tallas || []).join(", ");
+        fEtiqueta.value = p.etiqueta || "";
+        fOrden.value = p.orden ?? "";
+        fDetalle.value = p.detalle || "";
+        fImagen.value = "";
+        fActivo.checked = !!p.activo;
+        fDestacado.checked = !!p.destacado;
+        guardarBtn.textContent = "💾 Guardar cambios";
+        cancelarBtn.style.display = "inline-block";
+        panelOverlay.querySelector(".admin-caja").scrollTo({top:0, behavior:"smooth"});
+    }
+
+    async function subirImagen(file, productoId) {
+        if (!file) return null;
+        const extension = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const nombre = `${productoId}-${Date.now()}-${crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)}.${extension}`;
+        const ruta = `catalogo/${nombre}`;
+
+        const { error } = await sb.storage
+            .from("productos")
+            .upload(ruta, file, {
+                cacheControl: "3600",
+                upsert: false,
+                contentType: file.type || "image/jpeg"
+            });
+
+        if (error) throw error;
+
+        const { data } = sb.storage.from("productos").getPublicUrl(ruta);
+        return data.publicUrl;
+    }
+
+    async function guardarProducto() {
+        if (!esAdmin()) {
+            loginEstado.textContent = "Sesión de administrador no válida.";
+            return;
+        }
+
+        const nombre = fNombre.value.trim();
+        const precio = Number(fPrecio.value);
+        const tallas = fTallas.value.split(",").map(x => x.trim()).filter(Boolean);
+        const detalle = fDetalle.value.trim();
+        const etiqueta = fEtiqueta.value.trim();
+        const orden = Number.isFinite(Number(fOrden.value)) ? Number(fOrden.value) : 0;
+        const archivo = fImagen.files && fImagen.files[0];
+
+        if (!nombre) return adminEstado.textContent = "Escribe el nombre del producto.";
+        if (!Number.isFinite(precio) || precio < 0) return adminEstado.textContent = "Escribe un precio válido.";
+        if (!tallas.length) return adminEstado.textContent = "Escribe al menos una talla.";
+        if (!detalle) return adminEstado.textContent = "Escribe una descripción.";
+        if (!productoEditando && !archivo) return adminEstado.textContent = "Selecciona una imagen.";
+
+        guardarBtn.disabled = true;
+        adminEstado.textContent = productoEditando ? "Guardando cambios..." : "Publicando producto...";
+
+        try {
+            if (productoEditando) {
+                let imagen_url = productoEditando.imagen_url;
+                if (archivo) imagen_url = await subirImagen(archivo, productoEditando.id);
+
+                const { error } = await sb.from("productos").update({
+                    nombre, precio, tallas, detalle, etiqueta, imagen_url,
+                    activo: fActivo.checked, destacado: fDestacado.checked, orden
+                }).eq("id", productoEditando.id);
+
+                if (error) throw error;
+                adminEstado.textContent = "✅ Producto actualizado.";
+            } else {
+                const { data: creado, error: errorCrear } = await sb.from("productos").insert({
+                    nombre, precio, tallas, detalle, etiqueta,
+                    imagen_url: "https://placehold.co/800x800/111114/c8a96b?text=Subiendo...",
+                    activo: fActivo.checked, destacado: fDestacado.checked, orden
+                }).select().single();
+
+                if (errorCrear) throw errorCrear;
+
+                const imagen_url = await subirImagen(archivo, creado.id);
+                const { error: errorImagen } = await sb.from("productos").update({imagen_url}).eq("id", creado.id);
+                if (errorImagen) throw errorImagen;
+
+                adminEstado.textContent = "✅ Producto publicado.";
+            }
+
+            limpiarFormulario();
+            await cargarProductos();
+        } catch (error) {
+            console.error(error);
+            adminEstado.textContent = "❌ No se pudo guardar: " + (error.message || "error desconocido");
+        } finally {
+            guardarBtn.disabled = false;
+        }
+    }
+
+    async function eliminarProducto(p) {
+        if (!confirm(`¿Eliminar definitivamente “${p.nombre}”?`)) return;
+        adminEstado.textContent = "Eliminando...";
+        const { error } = await sb.from("productos").delete().eq("id", p.id);
+        if (error) {
+            adminEstado.textContent = "❌ No se pudo eliminar: " + error.message;
+            return;
+        }
+        if (productoEditando && productoEditando.id === p.id) limpiarFormulario();
+        adminEstado.textContent = "✅ Producto eliminado.";
+        await cargarProductos();
+    }
+
+    async function alternarActivo(p) {
+        const { error } = await sb.from("productos").update({activo: !p.activo}).eq("id", p.id);
+        if (error) {
+            adminEstado.textContent = "❌ No se pudo cambiar la visibilidad: " + error.message;
+            return;
+        }
+        await cargarProductos();
+    }
+
+    function renderListaAdmin() {
+        adminLista.innerHTML = "";
+        if (!productosDB.length) {
+            adminLista.innerHTML = "<p style='color:#aaa'>No hay productos.</p>";
+            return;
+        }
+
+        productosDB.forEach(p => {
+            const item = document.createElement("div");
+            item.className = "admin-item";
+            item.innerHTML = `
+                <img src="${esc(p.imagen_url)}" alt="${esc(p.nombre)}">
+                <div>
+                    <h4>${esc(p.nombre)}</h4>
+                    <small>$${Number(p.precio).toFixed(2)} · ${(p.tallas || []).join(", ")} · ${p.activo ? "Visible" : "Oculto"}</small>
+                </div>
+                <div class="admin-item-acciones">
+                    <button type="button" data-editar="${p.id}">✏️ Editar</button>
+                    <button type="button" data-visible="${p.id}">${p.activo ? "👁️ Ocultar" : "👁️ Mostrar"}</button>
+                    <button type="button" data-eliminar="${p.id}">🗑️</button>
+                </div>
+            `;
+            adminLista.appendChild(item);
+        });
+
+        adminLista.querySelectorAll("[data-editar]").forEach(btn => {
+            btn.onclick = () => editarProducto(productosDB.find(p => String(p.id) === btn.dataset.editar));
+        });
+        adminLista.querySelectorAll("[data-visible]").forEach(btn => {
+            btn.onclick = () => alternarActivo(productosDB.find(p => String(p.id) === btn.dataset.visible));
+        });
+        adminLista.querySelectorAll("[data-eliminar]").forEach(btn => {
+            btn.onclick = () => eliminarProducto(productosDB.find(p => String(p.id) === btn.dataset.eliminar));
+        });
+    }
+
+    adminBoton.addEventListener("click", () => {
+        if (esAdmin()) {
+            abrir(panelOverlay);
+            cargarProductos();
+        } else {
+            abrir(loginOverlay);
+        }
+    });
+
+    loginCerrar.addEventListener("click", () => cerrar(loginOverlay));
+    panelCerrar.addEventListener("click", () => cerrar(panelOverlay));
+    cancelarBtn.addEventListener("click", limpiarFormulario);
+    guardarBtn.addEventListener("click", guardarProducto);
+
+    loginBtn.addEventListener("click", async () => {
+        const password = loginPassword.value;
+        if (!password) {
+            loginEstado.textContent = "Escribe tu contraseña.";
+            return;
+        }
+        loginBtn.disabled = true;
+        loginEstado.textContent = "Verificando...";
+
+        const { data, error } = await sb.auth.signInWithPassword({
+            email: ADMIN_EMAIL,
+            password
+        });
+
+        if (error) {
+            loginEstado.textContent = "❌ Contraseña incorrecta o cuenta no creada todavía.";
+            loginBtn.disabled = false;
+            return;
+        }
+
+        const email = data.user && data.user.email;
+        if (!email || email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+            await sb.auth.signOut();
+            loginEstado.textContent = "❌ Esa cuenta no es administradora.";
+            loginBtn.disabled = false;
+            return;
+        }
+
+        window.__baifoAdmin = true;
+        mostrarBotonAdmin();
+        loginPassword.value = "";
+        loginEstado.textContent = "✅ Sesión iniciada.";
+        cerrar(loginOverlay);
+        abrir(panelOverlay);
+        loginBtn.disabled = false;
+        await cargarProductos();
+    });
+
+    cerrarSesionBtn.addEventListener("click", async () => {
+        await sb.auth.signOut();
+        window.__baifoAdmin = false;
+        mostrarBotonAdmin();
+        cerrar(panelOverlay);
+        limpiarFormulario();
+    });
+
+    buscador.addEventListener("input", renderCatalogo);
+
+    // Si se visita la página con ?admin=1 se abre el acceso.
+    if (new URLSearchParams(location.search).get("admin") === "1") {
+        abrir(loginOverlay);
+    }
+
+    // Sesión persistente: el admin inicia sesión una vez en ese navegador.
+    sb.auth.onAuthStateChange(async (_event, session) => {
+        const email = session && session.user && session.user.email;
+        window.__baifoAdmin = !!session && email && email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+        mostrarBotonAdmin();
+        if (window.__baifoAdmin) await cargarProductos();
+    });
+
+    // Catálogo público: no requiere iniciar sesión.
+    cargarProductos();
+
+    // Cambios en tiempo real para que el catálogo se actualice sin recargar.
+    sb.channel("catalogo-productos")
+        .on("postgres_changes", {
+            event: "*",
+            schema: "public",
+            table: "productos"
+        }, () => {
+            cargarProductos();
+        })
+        .subscribe();
+})();
+</script>
 
 </body>
 </html>
