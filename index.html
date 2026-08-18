@@ -1626,7 +1626,7 @@
 
 <!-- BARRA SUPERIOR -->
 
-<div class="top-bar">
+<div class="top-bar" id="top-bar-lista">
     <span>🚚 Entregas en CDMX</span>
     <span>✅ Jerseys premium</span>
     <span>📩 Atención por Instagram y WhatsApp</span>
@@ -1639,14 +1639,15 @@
 <header>
 
     <img
+        id="logo-tienda-img"
         src="https://i.postimg.cc/vZM4nz48/IMG-8344.jpg"
         alt="Báifo Football Store Logo"
         class="logo-tienda"
     >
 
-    <h1>Báifo Football Store</h1>
+    <h1 id="header-titulo">Báifo Football Store</h1>
 
-    <p>Selección de Jerseys Premium</p>
+    <p id="header-subtitulo">Selección de Jerseys Premium</p>
 
 </header>
 
@@ -1659,18 +1660,18 @@
 
         <div class="hero-texto">
 
-            <h2>
+            <h2 id="hero-titulo">
                 Jerseys con <span>estilo</span>,
                 calidad y presencia
             </h2>
 
-            <p>
+            <p id="hero-texto">
                 Encuentra modelos de clubes y selecciones
                 con diseño premium, excelente presentación
                 y entregas en CDMX.
             </p>
 
-            <div class="hero-badges">
+            <div class="hero-badges" id="hero-badges-lista">
 
                 <span class="hero-badge">
                     ⚽ Clubes y selecciones
@@ -1694,9 +1695,9 @@
 
         <div class="hero-card">
 
-            <h3>¿Por qué elegir Báifo?</h3>
+            <h3 id="hero-card-titulo">¿Por qué elegir Báifo?</h3>
 
-            <ul>
+            <ul id="hero-card-lista">
                 <li>✔ Atención rápida y directa</li>
                 <li>✔ Diseños que destacan</li>
                 <li>✔ Calidad premium</li>
@@ -1712,7 +1713,7 @@
 
 <!-- ENTREGAS -->
 
-<div class="barra-entregas">
+<div class="barra-entregas" id="entregas-texto">
 
     🚇 Entregas en CDMX
     <br>
@@ -1740,9 +1741,9 @@
 
 <section class="titulo-seccion">
 
-    <h2>Catálogo</h2>
+    <h2 id="catalogo-titulo">Catálogo</h2>
 
-    <p>
+    <p id="catalogo-subtitulo">
         Todos nuestros jerseys disponibles.
         Busca por equipo o selección.
     </p>
@@ -1779,10 +1780,15 @@
 <div id="admin-panel" class="admin-overlay" aria-hidden="true">
     <div class="admin-caja">
         <button class="admin-cerrar" type="button" id="admin-panel-cerrar">×</button>
-        <h2 class="admin-titulo">⚙️ Administrar catálogo</h2>
-        <p class="admin-subtitulo">Agrega o modifica jerseys sin tocar el código de la página.</p>
+        <h2 class="admin-titulo">⚙️ Administrar tienda</h2>
+        <p class="admin-subtitulo">Agrega o modifica jerseys y el contenido del sitio sin tocar el código.</p>
 
-        <div class="admin-vista visible">
+        <div class="admin-tabs" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+            <button type="button" class="admin-btn secundario" id="tab-btn-productos" style="flex:1;min-width:140px;">📦 Productos</button>
+            <button type="button" class="admin-btn secundario" id="tab-btn-contenido" style="flex:1;min-width:140px;">🛠️ Contenido del sitio</button>
+        </div>
+
+        <div class="admin-vista visible" id="admin-vista-productos">
             <div class="admin-form-grid">
                 <div class="admin-campo full">
                     <label for="admin-nombre">Nombre del producto</label>
@@ -1830,6 +1836,170 @@
 
             <h3 style="margin-top:26px;color:white;">Productos</h3>
             <div id="admin-lista" class="admin-lista"></div>
+        </div>
+
+        <div class="admin-vista" id="admin-vista-contenido">
+
+            <h3 style="color:white;">Identidad y encabezado</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="cfg-logo">Logo (deja vacío para conservar el actual)</label>
+                    <input id="cfg-logo" type="file" accept="image/*">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-titulo-header">Título principal</label>
+                    <input id="cfg-titulo-header" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-subtitulo-header">Subtítulo del encabezado</label>
+                    <input id="cfg-subtitulo-header" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-topbar">Barra superior (una frase por línea)</label>
+                    <textarea id="cfg-topbar" rows="4"></textarea>
+                </div>
+            </div>
+
+            <h3 style="color:white;">Hero (sección principal)</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="cfg-hero-titulo">Título del hero</label>
+                    <input id="cfg-hero-titulo" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-hero-texto">Texto del hero</label>
+                    <textarea id="cfg-hero-texto" rows="3"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-hero-badges">Etiquetas del hero (una por línea)</label>
+                    <textarea id="cfg-hero-badges" rows="4"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-hero-card-titulo">Título de la tarjeta lateral</label>
+                    <input id="cfg-hero-card-titulo" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-hero-card-items">Puntos de la tarjeta lateral (uno por línea)</label>
+                    <textarea id="cfg-hero-card-items" rows="4"></textarea>
+                </div>
+            </div>
+
+            <h3 style="color:white;">Entregas, buscador y catálogo</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="cfg-entregas-texto">Texto de la barra de entregas</label>
+                    <textarea id="cfg-entregas-texto" rows="2"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-buscador-placeholder">Placeholder del buscador</label>
+                    <input id="cfg-buscador-placeholder" type="text">
+                </div>
+                <div class="admin-campo">
+                    <label for="cfg-catalogo-titulo">Título del catálogo</label>
+                    <input id="cfg-catalogo-titulo" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-catalogo-subtitulo">Subtítulo del catálogo</label>
+                    <input id="cfg-catalogo-subtitulo" type="text">
+                </div>
+            </div>
+
+            <h3 style="color:white;">Contacto</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo">
+                    <label for="cfg-whatsapp">Número de WhatsApp (con código de país, sin +)</label>
+                    <input id="cfg-whatsapp" type="text" placeholder="525644006892">
+                </div>
+                <div class="admin-campo">
+                    <label for="cfg-instagram">Link de Instagram</label>
+                    <input id="cfg-instagram" type="text" placeholder="https://www.instagram.com/tu_cuenta/">
+                </div>
+            </div>
+
+            <h3 style="color:white;">Estampado y mensaje de pedido</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo">
+                    <label for="cfg-estampado-precio">Costo extra del estampado ($)</label>
+                    <input id="cfg-estampado-precio" type="number" min="0" step="0.01">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-mensaje-plantilla">Mensaje que se envía por WhatsApp / Instagram</label>
+                    <textarea id="cfg-mensaje-plantilla" rows="8"></textarea>
+                    <small style="color:#999;">
+                        Puedes usar: {producto} {precio} {talla} {cantidad} {estampado_linea} {detalle} {comentarios}.
+                        No borres las llaves {} de las que quieras conservar.
+                    </small>
+                </div>
+            </div>
+
+            <h3 style="color:white;">¿Por qué comprar aquí?</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="cfg-beneficios-titulo">Título de la sección</label>
+                    <input id="cfg-beneficios-titulo" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-beneficios">Tarjetas (formato: Título | Texto, una por línea)</label>
+                    <textarea id="cfg-beneficios" rows="5" placeholder="Calidad premium | Modelos seleccionados con gran presencia visual."></textarea>
+                </div>
+            </div>
+
+            <h3 style="color:white;">Reseñas de clientes</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="cfg-testimonios-titulo">Título de la sección</label>
+                    <input id="cfg-testimonios-titulo" type="text">
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-resenas">Reseñas (formato: Nombre | Comentario, una por línea)</label>
+                    <textarea id="cfg-resenas" rows="5" placeholder="Cliente Báifo | Muy buena calidad y la entrega fue súper sencilla."></textarea>
+                </div>
+            </div>
+
+            <h3 style="color:white;">Popups promocionales</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo">
+                    <label for="cfg-popup1-imagen">Imagen popup 1</label>
+                    <input id="cfg-popup1-imagen" type="file" accept="image/*">
+                </div>
+                <div class="admin-campo">
+                    <label><input id="cfg-popup1-activo" type="checkbox"> Mostrar popup 1</label>
+                </div>
+                <div class="admin-campo">
+                    <label for="cfg-popup2-imagen">Imagen popup 2</label>
+                    <input id="cfg-popup2-imagen" type="file" accept="image/*">
+                </div>
+                <div class="admin-campo">
+                    <label><input id="cfg-popup2-activo" type="checkbox"> Mostrar popup 2</label>
+                </div>
+            </div>
+
+            <h3 style="color:white;">Pie de página</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label for="cfg-footer-descripcion">Descripción de la tienda</label>
+                    <textarea id="cfg-footer-descripcion" rows="2"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-footer-entregas">Líneas de "Entregas" (una por línea)</label>
+                    <textarea id="cfg-footer-entregas" rows="3"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-footer-horario">Líneas de "Horario" (una por línea)</label>
+                    <textarea id="cfg-footer-horario" rows="2"></textarea>
+                </div>
+                <div class="admin-campo full">
+                    <label for="cfg-footer-copy">Texto de derechos reservados (una línea por renglón)</label>
+                    <textarea id="cfg-footer-copy" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="admin-acciones">
+                <button class="admin-btn principal" id="cfg-guardar" type="button">💾 Guardar contenido del sitio</button>
+                <button class="admin-btn secundario" id="admin-cerrar-sesion-2" type="button">Cerrar sesión</button>
+            </div>
+            <div id="cfg-estado" class="admin-estado"></div>
+
         </div>
     </div>
 </div>
@@ -2114,9 +2284,9 @@
 
 <section class="beneficios">
 
-    <h2>¿Por qué comprar aquí?</h2>
+    <h2 id="beneficios-titulo">¿Por qué comprar aquí?</h2>
 
-    <div class="grid-beneficios">
+    <div class="grid-beneficios" id="beneficios-lista">
 
         <div class="beneficio-card">
             <h3>Calidad premium</h3>
@@ -2159,9 +2329,9 @@
 
 <section class="testimonios">
 
-    <h2>Lo que dicen nuestros clientes</h2>
+    <h2 id="testimonios-titulo">Lo que dicen nuestros clientes</h2>
 
-    <div class="grid-testimonios">
+    <div class="grid-testimonios" id="testimonios-lista">
 
         <div class="testimonio">
             <p>
@@ -2199,7 +2369,7 @@
 
             <h3>Báifo Football Store</h3>
 
-            <p>
+            <p id="footer-descripcion">
                 Jerseys premium para quienes viven el fútbol con estilo.
             </p>
 
@@ -2209,9 +2379,11 @@
 
             <h3>Entregas</h3>
 
-            <p>CDMX</p>
-            <p>Líneas 2, 3 y 5 del Metro</p>
-            <p>Puntos de encuentro</p>
+            <div id="footer-entregas-lista">
+                <p>CDMX</p>
+                <p>Líneas 2, 3 y 5 del Metro</p>
+                <p>Puntos de encuentro</p>
+            </div>
 
         </div>
 
@@ -2220,6 +2392,7 @@
             <h3>Contacto</h3>
 
             <a
+                id="footer-instagram-link"
                 href="https://www.instagram.com/baifo_jerseys/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -2228,6 +2401,7 @@
             </a>
 
             <a
+                id="footer-whatsapp-link"
                 href="https://wa.me/525644006892"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -2243,14 +2417,16 @@
 
             <h3>Horario</h3>
 
-            <p>Lunes a sábado</p>
-            <p>Sujeto a disponibilidad</p>
+            <div id="footer-horario-lista">
+                <p>Lunes a sábado</p>
+                <p>Sujeto a disponibilidad</p>
+            </div>
 
         </div>
 
     </div>
 
-    <div class="footer-copy">
+    <div class="footer-copy" id="footer-copy-texto">
         © 2026 Báifo Football Store · Todos los derechos reservados.
         <br>
         Sitio web de Omali Rodríguez x Báifo Jerseys
@@ -2274,6 +2450,7 @@
         </button>
 
         <img
+            id="popup1-imagen"
             src="https://i.postimg.cc/8zhkfkXX/Post-de-Instagram-(34)-Descuentos-Promociones-Fashion-Elegante-Minimalista-Blanco-y-Negro.jpg"
             alt="Promoción de Báifo Football Store"
         >
@@ -2298,6 +2475,7 @@
         </button>
 
         <img
+            id="popup2-imagen"
             src="https://i.postimg.cc/DfC2Y1vX/IMG-0296.jpg"
             alt="Promoción de Báifo Football Store"
         >
@@ -2476,7 +2654,7 @@
                         Estampado nombre y número
                     </strong>
 
-                    <span>
+                    <span id="estampado-precio-texto">
                         + $50.00 costo extra
                     </span>
 
@@ -3121,55 +3299,22 @@
         }
 
 
-        let mensaje =
-            "Hola Báifo Football Store 👋\n\n";
+        const precioEstampado = Number(CONFIG.estampado_precio ?? 60);
 
-        mensaje +=
-            "Quiero hacer un pedido:\n\n";
+        const estampadoLinea = quiereEstampado
+            ? `🖨️ Estampado nombre y número (+$${precioEstampado.toFixed(2)}): ${estampadoNombre} #${estampadoNumero}\n`
+            : "";
 
-        mensaje +=
-            "⚽ Producto: " +
-            nombre +
-            "\n";
+        const plantilla = CONFIG.mensaje_plantilla || CONFIG_DEFAULT.mensaje_plantilla;
 
-        mensaje +=
-            "💰 Precio: $" +
-            precio +
-            ".00\n";
-
-        mensaje +=
-            "📏 Talla: " +
-            talla +
-            "\n";
-
-        mensaje +=
-            "🔢 Cantidad: " +
-            cantidad +
-            "\n";
-
-        if (quiereEstampado) {
-
-            mensaje +=
-                "🖨️ Estampado nombre y número (+$50): " +
-                estampadoNombre +
-                " #" +
-                estampadoNumero +
-                "\n";
-
-        }
-
-        mensaje +=
-            "📝 Detalle: " +
-            detalle +
-            "\n";
-
-        mensaje +=
-            "💬 Comentarios adicionales: " +
-            (comentarios || "Ninguno") +
-            "\n\n";
-
-        mensaje +=
-            "¿Me pueden confirmar disponibilidad?";
+        const mensaje = plantilla
+            .replace(/{producto}/g, nombre)
+            .replace(/{precio}/g, `$${precio}.00`)
+            .replace(/{talla}/g, talla)
+            .replace(/{cantidad}/g, cantidad)
+            .replace(/{estampado_linea}/g, estampadoLinea)
+            .replace(/{detalle}/g, detalle)
+            .replace(/{comentarios}/g, comentarios || "Ninguno");
 
         return mensaje;
 
@@ -3192,7 +3337,7 @@
             }
 
             const numero =
-                "525644006892";
+                CONFIG.whatsapp_numero || CONFIG_DEFAULT.whatsapp_numero;
 
             const url =
                 "https://wa.me/" +
@@ -3280,7 +3425,7 @@
             setTimeout(function() {
 
                 window.open(
-                    "https://www.instagram.com/baifo_jerseys/",
+                    CONFIG.instagram_url || CONFIG_DEFAULT.instagram_url,
                     "_blank",
                     "noopener,noreferrer"
                 );
@@ -3312,7 +3457,9 @@
 
         popup.classList.add("oculto");
 
-        popup2.classList.remove("oculto");
+        if (CONFIG.popup2_activo !== false) {
+            popup2.classList.remove("oculto");
+        }
 
     }
 
@@ -3454,6 +3601,58 @@
 
     let productosDB = [];
     let productoEditando = null;
+
+    // ---- Contenido del sitio (configuración editable) ----
+    const tabBtnProductos = document.getElementById("tab-btn-productos");
+    const tabBtnContenido = document.getElementById("tab-btn-contenido");
+    const vistaProductos = document.getElementById("admin-vista-productos");
+    const vistaContenido = document.getElementById("admin-vista-contenido");
+    const cerrarSesionBtn2 = document.getElementById("admin-cerrar-sesion-2");
+    const cfgEstado = document.getElementById("cfg-estado");
+    const cfgGuardarBtn = document.getElementById("cfg-guardar");
+
+    const CONFIG_DEFAULT = {
+        topbar: ["🚚 Entregas en CDMX", "✅ Jerseys premium", "📩 Atención por Instagram y WhatsApp", "🔥 Modelos exclusivos"],
+        logo_url: "https://i.postimg.cc/vZM4nz48/IMG-8344.jpg",
+        titulo_header: "Báifo Football Store",
+        subtitulo_header: "Selección de Jerseys Premium",
+        hero_titulo: "Jerseys con estilo, calidad y presencia",
+        hero_texto: "Encuentra modelos de clubes y selecciones con diseño premium, excelente presentación y entregas en CDMX.",
+        hero_badges: ["⚽ Clubes y selecciones", "📍 Entregas personales", "🔥 Piezas destacadas", "📱 Pedidos por WhatsApp"],
+        hero_card_titulo: "¿Por qué elegir Báifo?",
+        hero_card_items: ["✔ Atención rápida y directa", "✔ Diseños que destacan", "✔ Calidad premium", "✔ Entregas en puntos de encuentro"],
+        entregas_texto: "🚇 Entregas en CDMX\n(Líneas 2, 3 y 5 del Metro, y puntos de encuentro)",
+        buscador_placeholder: "Busca jersey, equipo o selección...",
+        catalogo_titulo: "Catálogo",
+        catalogo_subtitulo: "Todos nuestros jerseys disponibles. Busca por equipo o selección.",
+        whatsapp_numero: "525644006892",
+        instagram_url: "https://www.instagram.com/baifo_jerseys/",
+        estampado_precio: 60,
+        mensaje_plantilla: "Hola Báifo Football Store 👋\n\nQuiero hacer un pedido:\n\n⚽ Producto: {producto}\n💰 Precio: {precio}\n📏 Talla: {talla}\n🔢 Cantidad: {cantidad}\n{estampado_linea}📝 Detalle: {detalle}\n💬 Comentarios adicionales: {comentarios}\n\n¿Me pueden confirmar disponibilidad?",
+        beneficios_titulo: "¿Por qué comprar aquí?",
+        beneficios: [
+            {titulo: "Calidad premium", texto: "Modelos seleccionados con gran presencia visual y acabados atractivos."},
+            {titulo: "Entregas en CDMX", texto: "Puntos de encuentro prácticos para facilitar la entrega de tu pedido."},
+            {titulo: "Atención directa", texto: "Comunicación rápida para resolver dudas, tallas y disponibilidad."},
+            {titulo: "Modelos exclusivos", texto: "Opciones que resaltan por su diseño y estilo dentro del catálogo."}
+        ],
+        testimonios_titulo: "Lo que dicen nuestros clientes",
+        resenas: [
+            {nombre: "Cliente Báifo", texto: "Muy buena calidad y la entrega fue súper sencilla."},
+            {nombre: "Cliente satisfecho", texto: "La playera llegó excelente, se ve todavía mejor en persona."},
+            {nombre: "Comprador frecuente", texto: "Atención rápida y modelos diferentes a los de otras tiendas."}
+        ],
+        popup1_imagen: "https://i.postimg.cc/8zhkfkXX/Post-de-Instagram-(34)-Descuentos-Promociones-Fashion-Elegante-Minimalista-Blanco-y-Negro.jpg",
+        popup1_activo: true,
+        popup2_imagen: "https://i.postimg.cc/DfC2Y1vX/IMG-0296.jpg",
+        popup2_activo: true,
+        footer_descripcion: "Jerseys premium para quienes viven el fútbol con estilo.",
+        footer_entregas: ["CDMX", "Líneas 2, 3 y 5 del Metro", "Puntos de encuentro"],
+        footer_horario: ["Lunes a sábado", "Sujeto a disponibilidad"],
+        footer_copy: "© 2026 Báifo Football Store · Todos los derechos reservados.\nSitio web de Omali Rodríguez x Báifo Jerseys"
+    };
+
+    let CONFIG = Object.assign({}, CONFIG_DEFAULT);
 
     function abrir(overlay) {
         overlay.classList.add("visible");
@@ -3614,11 +3813,11 @@
         panelOverlay.querySelector(".admin-caja").scrollTo({top:0, behavior:"smooth"});
     }
 
-    async function subirImagen(file, productoId) {
+    async function subirImagen(file, productoId, carpeta) {
         if (!file) return null;
         const extension = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
         const nombre = `${productoId}-${Date.now()}-${crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)}.${extension}`;
-        const ruta = `catalogo/${nombre}`;
+        const ruta = `${carpeta || "catalogo"}/${nombre}`;
 
         const { error } = await sb.storage
             .from("productos")
@@ -3633,6 +3832,301 @@
         const { data } = sb.storage.from("productos").getPublicUrl(ruta);
         return data.publicUrl;
     }
+
+    /* =========================
+       CONTENIDO DEL SITIO (CONFIGURACIÓN)
+    ========================= */
+
+    function lineasDe(texto) {
+        return String(texto || "")
+            .split("\n")
+            .map(x => x.trim())
+            .filter(Boolean);
+    }
+
+    function parsearParClave(texto, claveA, claveB) {
+        return lineasDe(texto).map(linea => {
+            const partes = linea.split("|");
+            const a = (partes[0] || "").trim();
+            const b = (partes.slice(1).join("|") || "").trim();
+            const obj = {};
+            obj[claveA] = a;
+            obj[claveB] = b;
+            return obj;
+        }).filter(obj => obj[claveA]);
+    }
+
+    function aplicarConfiguracion() {
+        const c = CONFIG;
+
+        const topBar = document.getElementById("top-bar-lista");
+        if (topBar) {
+            topBar.innerHTML = (c.topbar || []).map(t => `<span>${esc(t)}</span>`).join("");
+        }
+
+        const logoImg = document.getElementById("logo-tienda-img");
+        if (logoImg && c.logo_url) logoImg.src = c.logo_url;
+
+        const headerTitulo = document.getElementById("header-titulo");
+        if (headerTitulo) headerTitulo.textContent = c.titulo_header || "";
+
+        const headerSubtitulo = document.getElementById("header-subtitulo");
+        if (headerSubtitulo) headerSubtitulo.textContent = c.subtitulo_header || "";
+
+        const heroTitulo = document.getElementById("hero-titulo");
+        if (heroTitulo) heroTitulo.textContent = c.hero_titulo || "";
+
+        const heroTexto = document.getElementById("hero-texto");
+        if (heroTexto) heroTexto.textContent = c.hero_texto || "";
+
+        const heroBadges = document.getElementById("hero-badges-lista");
+        if (heroBadges) {
+            heroBadges.innerHTML = (c.hero_badges || []).map(b => `<span class="hero-badge">${esc(b)}</span>`).join("");
+        }
+
+        const heroCardTitulo = document.getElementById("hero-card-titulo");
+        if (heroCardTitulo) heroCardTitulo.textContent = c.hero_card_titulo || "";
+
+        const heroCardLista = document.getElementById("hero-card-lista");
+        if (heroCardLista) {
+            heroCardLista.innerHTML = (c.hero_card_items || []).map(i => `<li>${esc(i)}</li>`).join("");
+        }
+
+        const entregasTexto = document.getElementById("entregas-texto");
+        if (entregasTexto) {
+            entregasTexto.innerHTML = esc(c.entregas_texto || "").replace(/\n/g, "<br>");
+        }
+
+        if (buscador) buscador.placeholder = c.buscador_placeholder || "";
+
+        const catalogoTitulo = document.getElementById("catalogo-titulo");
+        if (catalogoTitulo) catalogoTitulo.textContent = c.catalogo_titulo || "";
+
+        const catalogoSubtitulo = document.getElementById("catalogo-subtitulo");
+        if (catalogoSubtitulo) catalogoSubtitulo.textContent = c.catalogo_subtitulo || "";
+
+        const beneficiosTitulo = document.getElementById("beneficios-titulo");
+        if (beneficiosTitulo) beneficiosTitulo.textContent = c.beneficios_titulo || "";
+
+        const beneficiosLista = document.getElementById("beneficios-lista");
+        if (beneficiosLista) {
+            beneficiosLista.innerHTML = (c.beneficios || []).map(b => `
+                <div class="beneficio-card">
+                    <h3>${esc(b.titulo)}</h3>
+                    <p>${esc(b.texto)}</p>
+                </div>
+            `).join("");
+        }
+
+        const testimoniosTitulo = document.getElementById("testimonios-titulo");
+        if (testimoniosTitulo) testimoniosTitulo.textContent = c.testimonios_titulo || "";
+
+        const testimoniosLista = document.getElementById("testimonios-lista");
+        if (testimoniosLista) {
+            testimoniosLista.innerHTML = (c.resenas || []).map(r => `
+                <div class="testimonio">
+                    <p>"${esc(r.texto)}"</p>
+                    <strong>— ${esc(r.nombre)}</strong>
+                </div>
+            `).join("");
+        }
+
+        const footerDescripcion = document.getElementById("footer-descripcion");
+        if (footerDescripcion) footerDescripcion.textContent = c.footer_descripcion || "";
+
+        const footerEntregasLista = document.getElementById("footer-entregas-lista");
+        if (footerEntregasLista) {
+            footerEntregasLista.innerHTML = (c.footer_entregas || []).map(l => `<p>${esc(l)}</p>`).join("");
+        }
+
+        const footerHorarioLista = document.getElementById("footer-horario-lista");
+        if (footerHorarioLista) {
+            footerHorarioLista.innerHTML = (c.footer_horario || []).map(l => `<p>${esc(l)}</p>`).join("");
+        }
+
+        const footerCopy = document.getElementById("footer-copy-texto");
+        if (footerCopy) footerCopy.innerHTML = esc(c.footer_copy || "").replace(/\n/g, "<br>");
+
+        const footerInstagram = document.getElementById("footer-instagram-link");
+        if (footerInstagram && c.instagram_url) footerInstagram.href = c.instagram_url;
+
+        const footerWhatsapp = document.getElementById("footer-whatsapp-link");
+        if (footerWhatsapp && c.whatsapp_numero) {
+            footerWhatsapp.href = `https://wa.me/${c.whatsapp_numero}`;
+            footerWhatsapp.textContent = `WhatsApp: ${c.whatsapp_numero}`;
+        }
+
+        const estampadoPrecioTexto = document.getElementById("estampado-precio-texto");
+        if (estampadoPrecioTexto) {
+            estampadoPrecioTexto.textContent = `+ $${Number(c.estampado_precio ?? 60).toFixed(2)} costo extra`;
+        }
+
+        const popup1Img = document.getElementById("popup1-imagen");
+        if (popup1Img && c.popup1_imagen) popup1Img.src = c.popup1_imagen;
+        const popup1El = document.getElementById("popup-promocion");
+        if (popup1El && c.popup1_activo === false) popup1El.classList.add("oculto");
+
+        const popup2Img = document.getElementById("popup2-imagen");
+        if (popup2Img && c.popup2_imagen) popup2Img.src = c.popup2_imagen;
+    }
+
+    function rellenarFormularioConfig() {
+        const c = CONFIG;
+        const set = (id, valor) => { const el = document.getElementById(id); if (el) el.value = valor ?? ""; };
+        const setChecked = (id, valor) => { const el = document.getElementById(id); if (el) el.checked = !!valor; };
+
+        set("cfg-titulo-header", c.titulo_header);
+        set("cfg-subtitulo-header", c.subtitulo_header);
+        set("cfg-topbar", (c.topbar || []).join("\n"));
+
+        set("cfg-hero-titulo", c.hero_titulo);
+        set("cfg-hero-texto", c.hero_texto);
+        set("cfg-hero-badges", (c.hero_badges || []).join("\n"));
+        set("cfg-hero-card-titulo", c.hero_card_titulo);
+        set("cfg-hero-card-items", (c.hero_card_items || []).join("\n"));
+
+        set("cfg-entregas-texto", c.entregas_texto);
+        set("cfg-buscador-placeholder", c.buscador_placeholder);
+        set("cfg-catalogo-titulo", c.catalogo_titulo);
+        set("cfg-catalogo-subtitulo", c.catalogo_subtitulo);
+
+        set("cfg-whatsapp", c.whatsapp_numero);
+        set("cfg-instagram", c.instagram_url);
+
+        set("cfg-estampado-precio", c.estampado_precio);
+        set("cfg-mensaje-plantilla", c.mensaje_plantilla);
+
+        set("cfg-beneficios-titulo", c.beneficios_titulo);
+        set("cfg-beneficios", (c.beneficios || []).map(b => `${b.titulo} | ${b.texto}`).join("\n"));
+
+        set("cfg-testimonios-titulo", c.testimonios_titulo);
+        set("cfg-resenas", (c.resenas || []).map(r => `${r.nombre} | ${r.texto}`).join("\n"));
+
+        setChecked("cfg-popup1-activo", c.popup1_activo);
+        setChecked("cfg-popup2-activo", c.popup2_activo);
+
+        set("cfg-footer-descripcion", c.footer_descripcion);
+        set("cfg-footer-entregas", (c.footer_entregas || []).join("\n"));
+        set("cfg-footer-horario", (c.footer_horario || []).join("\n"));
+        set("cfg-footer-copy", c.footer_copy);
+    }
+
+    async function cargarConfiguracion() {
+        try {
+            const { data, error } = await sb
+                .from("configuracion")
+                .select("datos")
+                .eq("id", 1)
+                .maybeSingle();
+
+            if (error) throw error;
+
+            CONFIG = Object.assign({}, CONFIG_DEFAULT, (data && data.datos) || {});
+        } catch (error) {
+            console.error("No se pudo cargar la configuración del sitio:", error);
+            CONFIG = Object.assign({}, CONFIG_DEFAULT);
+        }
+
+        aplicarConfiguracion();
+        if (esAdmin()) rellenarFormularioConfig();
+    }
+
+    async function guardarConfiguracion() {
+        if (!esAdmin()) {
+            cfgEstado.textContent = "Sesión de administrador no válida.";
+            return;
+        }
+
+        cfgGuardarBtn.disabled = true;
+        cfgEstado.textContent = "Guardando cambios...";
+
+        try {
+            const nuevo = Object.assign({}, CONFIG);
+
+            nuevo.titulo_header = document.getElementById("cfg-titulo-header").value.trim();
+            nuevo.subtitulo_header = document.getElementById("cfg-subtitulo-header").value.trim();
+            nuevo.topbar = lineasDe(document.getElementById("cfg-topbar").value);
+
+            nuevo.hero_titulo = document.getElementById("cfg-hero-titulo").value.trim();
+            nuevo.hero_texto = document.getElementById("cfg-hero-texto").value.trim();
+            nuevo.hero_badges = lineasDe(document.getElementById("cfg-hero-badges").value);
+            nuevo.hero_card_titulo = document.getElementById("cfg-hero-card-titulo").value.trim();
+            nuevo.hero_card_items = lineasDe(document.getElementById("cfg-hero-card-items").value);
+
+            nuevo.entregas_texto = document.getElementById("cfg-entregas-texto").value.trim();
+            nuevo.buscador_placeholder = document.getElementById("cfg-buscador-placeholder").value.trim();
+            nuevo.catalogo_titulo = document.getElementById("cfg-catalogo-titulo").value.trim();
+            nuevo.catalogo_subtitulo = document.getElementById("cfg-catalogo-subtitulo").value.trim();
+
+            nuevo.whatsapp_numero = document.getElementById("cfg-whatsapp").value.trim().replace(/[^0-9]/g, "");
+            nuevo.instagram_url = document.getElementById("cfg-instagram").value.trim();
+
+            const precioEstampado = Number(document.getElementById("cfg-estampado-precio").value);
+            nuevo.estampado_precio = Number.isFinite(precioEstampado) ? precioEstampado : 60;
+            nuevo.mensaje_plantilla = document.getElementById("cfg-mensaje-plantilla").value;
+
+            nuevo.beneficios_titulo = document.getElementById("cfg-beneficios-titulo").value.trim();
+            nuevo.beneficios = parsearParClave(document.getElementById("cfg-beneficios").value, "titulo", "texto");
+
+            nuevo.testimonios_titulo = document.getElementById("cfg-testimonios-titulo").value.trim();
+            nuevo.resenas = parsearParClave(document.getElementById("cfg-resenas").value, "nombre", "texto");
+
+            nuevo.popup1_activo = document.getElementById("cfg-popup1-activo").checked;
+            nuevo.popup2_activo = document.getElementById("cfg-popup2-activo").checked;
+
+            nuevo.footer_descripcion = document.getElementById("cfg-footer-descripcion").value.trim();
+            nuevo.footer_entregas = lineasDe(document.getElementById("cfg-footer-entregas").value);
+            nuevo.footer_horario = lineasDe(document.getElementById("cfg-footer-horario").value);
+            nuevo.footer_copy = document.getElementById("cfg-footer-copy").value;
+
+            const archivoLogo = document.getElementById("cfg-logo").files[0];
+            if (archivoLogo) nuevo.logo_url = await subirImagen(archivoLogo, "logo", "sitio");
+
+            const archivoPopup1 = document.getElementById("cfg-popup1-imagen").files[0];
+            if (archivoPopup1) nuevo.popup1_imagen = await subirImagen(archivoPopup1, "popup1", "sitio");
+
+            const archivoPopup2 = document.getElementById("cfg-popup2-imagen").files[0];
+            if (archivoPopup2) nuevo.popup2_imagen = await subirImagen(archivoPopup2, "popup2", "sitio");
+
+            const { error } = await sb
+                .from("configuracion")
+                .upsert({ id: 1, datos: nuevo });
+
+            if (error) throw error;
+
+            CONFIG = nuevo;
+            aplicarConfiguracion();
+            document.getElementById("cfg-logo").value = "";
+            document.getElementById("cfg-popup1-imagen").value = "";
+            document.getElementById("cfg-popup2-imagen").value = "";
+            cfgEstado.textContent = "✅ Contenido del sitio actualizado.";
+        } catch (error) {
+            console.error(error);
+            cfgEstado.textContent = "❌ No se pudo guardar: " + (error.message || "error desconocido");
+        } finally {
+            cfgGuardarBtn.disabled = false;
+        }
+    }
+
+    function mostrarTab(nombre) {
+        const esProductos = nombre === "productos";
+        vistaProductos.classList.toggle("visible", esProductos);
+        vistaContenido.classList.toggle("visible", !esProductos);
+
+        tabBtnProductos.classList.toggle("principal", esProductos);
+        tabBtnProductos.classList.toggle("secundario", !esProductos);
+        tabBtnContenido.classList.toggle("principal", !esProductos);
+        tabBtnContenido.classList.toggle("secundario", esProductos);
+
+        if (!esProductos) rellenarFormularioConfig();
+    }
+
+    mostrarTab("productos");
+
+    if (tabBtnProductos) tabBtnProductos.addEventListener("click", () => mostrarTab("productos"));
+    if (tabBtnContenido) tabBtnContenido.addEventListener("click", () => mostrarTab("contenido"));
+    if (cfgGuardarBtn) cfgGuardarBtn.addEventListener("click", guardarConfiguracion);
+    if (cerrarSesionBtn2) cerrarSesionBtn2.addEventListener("click", () => cerrarSesionBtn.click());
 
     async function guardarProducto() {
         if (!esAdmin()) {
@@ -3757,6 +4251,7 @@
         if (esAdmin()) {
             abrir(panelOverlay);
             cargarProductos();
+            rellenarFormularioConfig();
         } else {
             abrir(loginOverlay);
         }
@@ -3803,6 +4298,7 @@
         abrir(panelOverlay);
         loginBtn.disabled = false;
         await cargarProductos();
+        rellenarFormularioConfig();
     });
 
     cerrarSesionBtn.addEventListener("click", async () => {
@@ -3831,6 +4327,9 @@
     // Catálogo público: no requiere iniciar sesión.
     cargarProductos();
 
+    // Contenido del sitio: se carga para todos los visitantes.
+    cargarConfiguracion();
+
     // Cambios en tiempo real para que el catálogo se actualice sin recargar.
     sb.channel("catalogo-productos")
         .on("postgres_changes", {
@@ -3839,6 +4338,17 @@
             table: "productos"
         }, () => {
             cargarProductos();
+        })
+        .subscribe();
+
+    // Cambios en tiempo real del contenido del sitio.
+    sb.channel("configuracion-sitio")
+        .on("postgres_changes", {
+            event: "*",
+            schema: "public",
+            table: "configuracion"
+        }, () => {
+            cargarConfiguracion();
         })
         .subscribe();
 })();
