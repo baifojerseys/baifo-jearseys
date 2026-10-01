@@ -2749,6 +2749,50 @@
 
 <script>
 
+    const CONFIG_DEFAULT = {
+        topbar: ["🚚 Entregas en CDMX", "✅ Jerseys premium", "📩 Atención por Instagram y WhatsApp", "🔥 Modelos exclusivos"],
+        logo_url: "https://i.postimg.cc/vZM4nz48/IMG-8344.jpg",
+        titulo_header: "Báifo Football Store",
+        subtitulo_header: "Selección de Jerseys Premium",
+        hero_titulo: "Jerseys con estilo, calidad y presencia",
+        hero_texto: "Encuentra modelos de clubes y selecciones con diseño premium, excelente presentación y entregas en CDMX.",
+        hero_badges: ["⚽ Clubes y selecciones", "📍 Entregas personales", "🔥 Piezas destacadas", "📱 Pedidos por WhatsApp"],
+        hero_card_titulo: "¿Por qué elegir Báifo?",
+        hero_card_items: ["✔ Atención rápida y directa", "✔ Diseños que destacan", "✔ Calidad premium", "✔ Entregas en puntos de encuentro"],
+        entregas_texto: "🚇 Entregas en CDMX\n(Líneas 2, 3 y 5 del Metro, y puntos de encuentro)",
+        buscador_placeholder: "Busca jersey, equipo o selección...",
+        catalogo_titulo: "Catálogo",
+        catalogo_subtitulo: "Todos nuestros jerseys disponibles. Busca por equipo o selección.",
+        whatsapp_numero: "525644006892",
+        instagram_url: "https://www.instagram.com/baifo_jerseys/",
+        estampado_precio: 60,
+        mensaje_plantilla: "Hola Báifo Football Store 👋\n\nQuiero hacer un pedido:\n\n⚽ Producto: {producto}\n💰 Precio: {precio}\n📏 Talla: {talla}\n🔢 Cantidad: {cantidad}\n{estampado_linea}📝 Detalle: {detalle}\n💬 Comentarios adicionales: {comentarios}\n\n¿Me pueden confirmar disponibilidad?",
+        beneficios_titulo: "¿Por qué comprar aquí?",
+        beneficios: [
+            {titulo: "Calidad premium", texto: "Modelos seleccionados con gran presencia visual y acabados atractivos."},
+            {titulo: "Entregas en CDMX", texto: "Puntos de encuentro prácticos para facilitar la entrega de tu pedido."},
+            {titulo: "Atención directa", texto: "Comunicación rápida para resolver dudas, tallas y disponibilidad."},
+            {titulo: "Modelos exclusivos", texto: "Opciones que resaltan por su diseño y estilo dentro del catálogo."}
+        ],
+        testimonios_titulo: "Lo que dicen nuestros clientes",
+        resenas: [
+            {nombre: "Cliente Báifo", texto: "Muy buena calidad y la entrega fue súper sencilla."},
+            {nombre: "Cliente satisfecho", texto: "La playera llegó excelente, se ve todavía mejor en persona."},
+            {nombre: "Comprador frecuente", texto: "Atención rápida y modelos diferentes a los de otras tiendas."}
+        ],
+        popup1_imagen: "https://i.postimg.cc/8zhkfkXX/Post-de-Instagram-(34)-Descuentos-Promociones-Fashion-Elegante-Minimalista-Blanco-y-Negro.jpg",
+        popup1_activo: true,
+        popup2_imagen: "https://i.postimg.cc/DfC2Y1vX/IMG-0296.jpg",
+        popup2_activo: true,
+        footer_descripcion: "Jerseys premium para quienes viven el fútbol con estilo.",
+        footer_entregas: ["CDMX", "Líneas 2, 3 y 5 del Metro", "Puntos de encuentro"],
+        footer_horario: ["Lunes a sábado", "Sujeto a disponibilidad"],
+        footer_copy: "© 2026 Báifo Football Store · Todos los derechos reservados.\nSitio web de Omali Rodríguez x Báifo Jerseys"
+    };
+
+    let CONFIG = Object.assign({}, CONFIG_DEFAULT);
+
+
     /* =========================
        BUSCADOR
     ========================= */
@@ -3322,6 +3366,50 @@
 
 
     /* =========================
+       ENLACES
+    ========================= */
+
+    function normalizarInstagram(valor) {
+
+        let url = String(valor || "").trim();
+
+        if (!url) {
+            return "";
+        }
+
+        if (/^https?:\/\//i.test(url)) {
+            return url;
+        }
+
+        if (/instagram\.com/i.test(url)) {
+            return "https://" + url.replace(/^\/+/, "");
+        }
+
+        url = url.replace(/^@/, "").replace(/^\/+|\/+$/g, "");
+
+        return "https://www.instagram.com/" + url + "/";
+
+    }
+
+    function abrirEnlace(url, ventana) {
+
+        if (ventana && !ventana.closed) {
+            ventana.location.href = url;
+            return;
+        }
+
+        const nueva = window.open(url, "_blank");
+
+        if (nueva) {
+            nueva.opener = null;
+        } else {
+            window.location.href = url;
+        }
+
+    }
+
+
+    /* =========================
        WHATSAPP
     ========================= */
 
@@ -3337,7 +3425,9 @@
             }
 
             const numero =
-                CONFIG.whatsapp_numero || CONFIG_DEFAULT.whatsapp_numero;
+                String(
+                    CONFIG.whatsapp_numero || CONFIG_DEFAULT.whatsapp_numero
+                ).replace(/\D/g, "");
 
             const url =
                 "https://wa.me/" +
@@ -3345,11 +3435,7 @@
                 "?text=" +
                 encodeURIComponent(mensaje);
 
-            window.open(
-                url,
-                "_blank",
-                "noopener,noreferrer"
-            );
+            abrirEnlace(url);
 
             cerrarFormulario();
 
@@ -3370,6 +3456,13 @@
 
             if (!mensaje) {
                 return;
+            }
+
+            const ventanaInstagram =
+                window.open("", "_blank");
+
+            if (ventanaInstagram) {
+                ventanaInstagram.opener = null;
             }
 
 
@@ -3424,10 +3517,11 @@
 
             setTimeout(function() {
 
-                window.open(
-                    CONFIG.instagram_url || CONFIG_DEFAULT.instagram_url,
-                    "_blank",
-                    "noopener,noreferrer"
+                abrirEnlace(
+                    normalizarInstagram(
+                        CONFIG.instagram_url || CONFIG_DEFAULT.instagram_url
+                    ) || CONFIG_DEFAULT.instagram_url,
+                    ventanaInstagram
                 );
 
                 cerrarFormulario();
@@ -3611,48 +3705,6 @@
     const cfgEstado = document.getElementById("cfg-estado");
     const cfgGuardarBtn = document.getElementById("cfg-guardar");
 
-    const CONFIG_DEFAULT = {
-        topbar: ["🚚 Entregas en CDMX", "✅ Jerseys premium", "📩 Atención por Instagram y WhatsApp", "🔥 Modelos exclusivos"],
-        logo_url: "https://i.postimg.cc/vZM4nz48/IMG-8344.jpg",
-        titulo_header: "Báifo Football Store",
-        subtitulo_header: "Selección de Jerseys Premium",
-        hero_titulo: "Jerseys con estilo, calidad y presencia",
-        hero_texto: "Encuentra modelos de clubes y selecciones con diseño premium, excelente presentación y entregas en CDMX.",
-        hero_badges: ["⚽ Clubes y selecciones", "📍 Entregas personales", "🔥 Piezas destacadas", "📱 Pedidos por WhatsApp"],
-        hero_card_titulo: "¿Por qué elegir Báifo?",
-        hero_card_items: ["✔ Atención rápida y directa", "✔ Diseños que destacan", "✔ Calidad premium", "✔ Entregas en puntos de encuentro"],
-        entregas_texto: "🚇 Entregas en CDMX\n(Líneas 2, 3 y 5 del Metro, y puntos de encuentro)",
-        buscador_placeholder: "Busca jersey, equipo o selección...",
-        catalogo_titulo: "Catálogo",
-        catalogo_subtitulo: "Todos nuestros jerseys disponibles. Busca por equipo o selección.",
-        whatsapp_numero: "525644006892",
-        instagram_url: "https://www.instagram.com/baifo_jerseys/",
-        estampado_precio: 60,
-        mensaje_plantilla: "Hola Báifo Football Store 👋\n\nQuiero hacer un pedido:\n\n⚽ Producto: {producto}\n💰 Precio: {precio}\n📏 Talla: {talla}\n🔢 Cantidad: {cantidad}\n{estampado_linea}📝 Detalle: {detalle}\n💬 Comentarios adicionales: {comentarios}\n\n¿Me pueden confirmar disponibilidad?",
-        beneficios_titulo: "¿Por qué comprar aquí?",
-        beneficios: [
-            {titulo: "Calidad premium", texto: "Modelos seleccionados con gran presencia visual y acabados atractivos."},
-            {titulo: "Entregas en CDMX", texto: "Puntos de encuentro prácticos para facilitar la entrega de tu pedido."},
-            {titulo: "Atención directa", texto: "Comunicación rápida para resolver dudas, tallas y disponibilidad."},
-            {titulo: "Modelos exclusivos", texto: "Opciones que resaltan por su diseño y estilo dentro del catálogo."}
-        ],
-        testimonios_titulo: "Lo que dicen nuestros clientes",
-        resenas: [
-            {nombre: "Cliente Báifo", texto: "Muy buena calidad y la entrega fue súper sencilla."},
-            {nombre: "Cliente satisfecho", texto: "La playera llegó excelente, se ve todavía mejor en persona."},
-            {nombre: "Comprador frecuente", texto: "Atención rápida y modelos diferentes a los de otras tiendas."}
-        ],
-        popup1_imagen: "https://i.postimg.cc/8zhkfkXX/Post-de-Instagram-(34)-Descuentos-Promociones-Fashion-Elegante-Minimalista-Blanco-y-Negro.jpg",
-        popup1_activo: true,
-        popup2_imagen: "https://i.postimg.cc/DfC2Y1vX/IMG-0296.jpg",
-        popup2_activo: true,
-        footer_descripcion: "Jerseys premium para quienes viven el fútbol con estilo.",
-        footer_entregas: ["CDMX", "Líneas 2, 3 y 5 del Metro", "Puntos de encuentro"],
-        footer_horario: ["Lunes a sábado", "Sujeto a disponibilidad"],
-        footer_copy: "© 2026 Báifo Football Store · Todos los derechos reservados.\nSitio web de Omali Rodríguez x Báifo Jerseys"
-    };
-
-    let CONFIG = Object.assign({}, CONFIG_DEFAULT);
 
     function abrir(overlay) {
         overlay.classList.add("visible");
@@ -3948,11 +4000,11 @@
         if (footerCopy) footerCopy.innerHTML = esc(c.footer_copy || "").replace(/\n/g, "<br>");
 
         const footerInstagram = document.getElementById("footer-instagram-link");
-        if (footerInstagram && c.instagram_url) footerInstagram.href = c.instagram_url;
+        if (footerInstagram && c.instagram_url) footerInstagram.href = normalizarInstagram(c.instagram_url);
 
         const footerWhatsapp = document.getElementById("footer-whatsapp-link");
         if (footerWhatsapp && c.whatsapp_numero) {
-            footerWhatsapp.href = `https://wa.me/${c.whatsapp_numero}`;
+            footerWhatsapp.href = `https://wa.me/${String(c.whatsapp_numero).replace(/\D/g, "")}`;
             footerWhatsapp.textContent = `WhatsApp: ${c.whatsapp_numero}`;
         }
 
@@ -4059,7 +4111,7 @@
             nuevo.catalogo_subtitulo = document.getElementById("cfg-catalogo-subtitulo").value.trim();
 
             nuevo.whatsapp_numero = document.getElementById("cfg-whatsapp").value.trim().replace(/[^0-9]/g, "");
-            nuevo.instagram_url = document.getElementById("cfg-instagram").value.trim();
+            nuevo.instagram_url = normalizarInstagram(document.getElementById("cfg-instagram").value);
 
             const precioEstampado = Number(document.getElementById("cfg-estampado-precio").value);
             nuevo.estampado_precio = Number.isFinite(precioEstampado) ? precioEstampado : 60;
