@@ -2138,6 +2138,16 @@
         50%      { transform: translateY(-8px); }
     }
 
+    /* Banner en modo "cupón canjeado" */
+    .hw-banner-girar { display: none; margin-top: .45rem; }
+    .hw-boton--mini { padding: .45rem 1rem; font-size: .8rem; }
+    .hw-banner.hw-canjeado { border-color: #3ddc84; box-shadow: 0 14px 40px rgba(0,0,0,.6), 0 0 28px rgba(61,220,132,.25); }
+    .hw-banner.hw-canjeado .hw-b-cod { display: none; }
+    .hw-banner.hw-canjeado .hw-banner-top b { color: #7dffb0; }
+    .hw-banner.hw-canjeado .hw-reloj { font-size: .95rem; letter-spacing: 0; color: #7dffb0; animation: none; }
+    .hw-banner.hw-canjeado .hw-banner-girar { display: inline-block; }
+    .hw-banner.hw-canjeado.hw-mini .hw-banner-girar { display: none; }
+
     /* Precio con descuento dentro del modal de pedido */
     .hw-precio-desc {
         display: block;
@@ -4032,6 +4042,9 @@
 
             abrirEnlace(url);
 
+            // 🎃 Halloween: el pedido salió con el descuento → el cupón queda canjeado
+            if (window.HalloweenDescuento) window.HalloweenDescuento.canjear();
+
             cerrarFormulario();
 
         }
@@ -4118,6 +4131,9 @@
                     ) || CONFIG_DEFAULT.instagram_url,
                     ventanaInstagram
                 );
+
+                // 🎃 Halloween: el pedido salió con el descuento → el cupón queda canjeado
+                if (window.HalloweenDescuento) window.HalloweenDescuento.canjear();
 
                 cerrarFormulario();
 
@@ -5064,10 +5080,11 @@
     <div class="hw-banner-cuerpo">
         <div class="hw-banner-top">
             <b id="hw-banner-desc"></b>
-            <span>Código: <span id="hw-banner-codigo" class="hw-banner-codigo"></span></span>
+            <span class="hw-b-cod">Código: <span id="hw-banner-codigo" class="hw-banner-codigo"></span></span>
         </div>
         <div id="hw-reloj" class="hw-reloj" role="timer" aria-label="Tiempo restante de tu descuento">24:00:00</div>
         <div id="hw-urgencia" class="hw-urgencia"></div>
+        <button type="button" id="hw-banner-girar" class="hw-boton hw-boton--mini hw-banner-girar">🎃 Girar otra vez</button>
     </div>
     <button type="button" id="hw-banner-min" class="hw-banner-cerrar" aria-label="Minimizar banner" title="Minimizar">–</button>
 </aside>
@@ -5367,6 +5384,9 @@
 
     function iniciarBanner(estado) {
         const banner = $("hw-banner");
+        banner.classList.remove("hw-canjeado", "hw-mini");
+        $("hw-banner-min").textContent = "–";
+        document.querySelector(".hw-banner-icono").textContent = "🎃";
         $("hw-banner-desc").textContent = `${estado.descuento}% OFF`;
         $("hw-banner-codigo").textContent = estado.codigo;
         banner.hidden = false;
@@ -5383,6 +5403,12 @@
         // Cuenta regresiva basada en la hora real (no se desfasa aunque la pestaña esté en segundo plano)
         const reloj = $("hw-reloj");
         function tick() {
+            if (!Almacen.leer()) {            // el cupón ya se canjeó (p. ej. desde otra pestaña)
+                clearInterval(intervaloReloj);
+                clearInterval(intervaloUrgencia);
+                banner.hidden = true;
+                return;
+            }
             const restante = estado.expira - Date.now();
             if (restante <= 0) {
                 clearInterval(intervaloReloj);
@@ -5523,6 +5549,46 @@
     }
 
     /* ======================================================
+       CUPÓN CANJEADO
+       Al enviar el pedido por WhatsApp/Instagram con el descuento, el cupón se
+       da por usado: se detiene el temporizador, el banner lo avisa y la ruleta
+       vuelve a quedar disponible (botón "Girar otra vez" o al recargar).
+    ====================================================== */
+
+    function mostrarCanjeado(estado) {
+        clearInterval(intervaloReloj);
+        clearInterval(intervaloUrgencia);
+        const banner = $("hw-banner");
+        banner.classList.add("hw-canjeado");
+        banner.classList.remove("hw-mini");
+        $("hw-banner-min").textContent = "–";
+        document.querySelector(".hw-banner-icono").textContent = "✅";
+        $("hw-banner-desc").textContent = "¡CUPÓN CANJEADO!";
+        $("hw-reloj").classList.remove("hw-urgente");
+        $("hw-reloj").textContent = `Tu cupón ${estado.codigo} ya fue usado en tu pedido.`;
+        $("hw-urgencia").textContent = "¡Gracias por tu compra! ¿Quieres probar tu suerte otra vez?";
+        banner.hidden = false;
+    }
+
+    function reiniciarUIRuleta() {
+        $("hw-resultado").hidden = true;
+        $("hw-resultado").classList.remove("hw-resultado--epico");
+        $("hw-girar").hidden = false;
+        $("hw-girar").disabled = false;
+        $("hw-subtitulo").hidden = false;
+        $("hw-cerrar").style.visibility = "visible";
+    }
+
+    function girarOtraVez() {
+        if (girando || estadoVigente()) return;
+        $("hw-banner").hidden = true;
+        $("hw-banner").classList.remove("hw-canjeado", "hw-mini");
+        reiniciarUIRuleta();
+        yaDisparada = true;
+        abrirRuleta();
+    }
+
+    /* ======================================================
        API PÚBLICA: la usa el flujo de pedido (WhatsApp / Instagram)
        para aplicar y añadir el descuento ganado al mensaje.
     ====================================================== */
@@ -5554,6 +5620,15 @@
             }
             elPrecio.classList.add("hw-precio-tachado");
             nota.textContent = `🎃 Descuento Halloween -${e.descuento}%: ${dinero(precio * (1 - e.descuento / 100))} (código ${e.codigo})`;
+        },
+
+        /** Marca el cupón como usado (se llama al enviar el pedido). Devuelve true si había uno. */
+        canjear() {
+            const e = this.activo();
+            if (!e) return false;
+            Almacen.borrar();          // libera el bloqueo: la ruleta puede volver a girarse
+            mostrarCanjeado(e);
+            return true;
         },
 
         /** Bloque de texto que se añade al final del mensaje de pedido ("" si no hay descuento). */
@@ -5630,6 +5705,8 @@
             }
             setTimeout(() => { $("hw-copiar").textContent = "Copiar"; }, 1800);
         });
+
+        $("hw-banner-girar").addEventListener("click", girarOtraVez);
 
         $("hw-banner-min").addEventListener("click", () => {
             const mini = $("hw-banner").classList.toggle("hw-mini");
