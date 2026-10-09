@@ -1603,6 +1603,573 @@
         }
     }
 
+
+    /* ==========================================================
+       🎃 HALLOWEEN · "DULCE O TRUCO"
+       Todo el tema vive bajo body.halloween, así que quitar esa
+       clase (o terminar la campaña) restaura el diseño original.
+    ========================================================== */
+
+    body.halloween {
+        --vino: #3b1157;          /* morado oscuro (reemplaza al vino) */
+        --vino-claro: #5b2190;
+        --vino-oscuro: #1b0830;
+        --dorado: #ff7a18;        /* naranja calabaza */
+        --hw-naranja: #ff7a18;
+        --hw-naranja-2: #ffa24d;
+        --hw-morado: #5b2190;
+        --hw-negro: #08060c;
+
+        background:
+            radial-gradient(circle at 15% 10%, rgba(91,33,144,.24), transparent 30%),
+            radial-gradient(circle at 90% 40%, rgba(255,122,24,.09), transparent 30%),
+            linear-gradient(180deg, #08060c 0%, #100b16 45%, #08060c 100%);
+    }
+
+    body.halloween ::selection {
+        background: var(--hw-naranja);
+        color: #120a1a;
+    }
+
+    body.halloween header {
+        background: linear-gradient(120deg, #07050a 0%, #150d1d 45%, #2a0e45 100%);
+    }
+
+    body.halloween header::before {
+        background: rgba(255,122,24,.13);
+    }
+
+    body.halloween header::after {
+        background: linear-gradient(90deg, transparent, rgba(255,122,24,.95), rgba(139,63,214,.9), transparent);
+    }
+
+    body.halloween .logo-tienda {
+        box-shadow: 0 15px 40px rgba(0,0,0,.55), 0 0 0 8px rgba(255,122,24,.14), 0 0 30px rgba(139,63,214,.35);
+    }
+
+    body.halloween .top-bar {
+        border-bottom-color: rgba(255,122,24,.25);
+    }
+
+    body.halloween .hero-box {
+        border-color: rgba(255,122,24,.18);
+        background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(91,33,144,.16));
+    }
+
+    /* Adorno sutil: telarañas y calabaza en el header (decorativo, sin interacción) */
+    body.halloween header .hw-deco {
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        user-select: none;
+        opacity: .55;
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
+        filter: drop-shadow(0 0 10px rgba(255,122,24,.55));
+    }
+    body.halloween header .hw-deco--1 { left: 6%;  top: 18%; animation: hwFlotar 5s ease-in-out infinite; }
+    body.halloween header .hw-deco--2 { right: 8%; top: 22%; animation: hwFlotar 6s .8s ease-in-out infinite; }
+    body.halloween header .hw-deco--3 { left: 14%; bottom: 14%; animation: hwFlotar 7s .4s ease-in-out infinite; }
+    header .hw-deco { display: none; }
+    body.halloween header .hw-deco { display: block; }
+
+    @keyframes hwFlotar {
+        0%, 100% { transform: translateY(0) rotate(-4deg); }
+        50%      { transform: translateY(-9px) rotate(4deg); }
+    }
+
+    /* ---------- Modal de la ruleta ---------- */
+
+    .hw-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;           /* por encima de los popups promocionales (9999) */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(5,3,9,.88);
+        backdrop-filter: blur(6px);
+        overflow-y: auto;
+    }
+
+    .hw-overlay[hidden],
+    .hw-overlay [hidden],
+    .hw-banner[hidden] { display: none !important; }
+
+    .hw-modal {
+        position: relative;
+        width: min(94vw, 460px);
+        max-height: 96vh;
+        overflow-y: auto;
+        text-align: center;
+        padding: 1.6rem 1.3rem 1.5rem;
+        border-radius: 22px;
+        color: var(--blanco);
+        background:
+            radial-gradient(circle at 50% 0%, rgba(255,122,24,.18), transparent 55%),
+            linear-gradient(160deg, #1a0d28 0%, #0b0711 100%);
+        border: 1px solid rgba(255,122,24,.45);
+        box-shadow: 0 0 0 4px rgba(91,33,144,.25), 0 25px 70px rgba(0,0,0,.75), 0 0 60px rgba(255,122,24,.18);
+        animation: popupEntrada .35s ease both;
+    }
+
+    .hw-cerrar {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255,255,255,.1);
+        color: #fff;
+        font-size: 1.4rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: transform .25s ease, background .25s ease;
+    }
+    .hw-cerrar:hover { background: var(--hw-naranja); color: #120a1a; transform: rotate(90deg); }
+
+    .hw-titulo {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: var(--hw-naranja);
+        text-shadow: 0 0 18px rgba(255,122,24,.55);
+    }
+
+    .hw-subtitulo {
+        margin: .35rem auto 1rem;
+        max-width: 34ch;
+        font-size: .9rem;
+        color: #cfc6dc;
+    }
+
+    /* ---------- Ruleta ---------- */
+
+    .hw-ruleta-wrap {
+        position: relative;
+        width: min(78vw, 300px);
+        aspect-ratio: 1;
+        margin: 0 auto 1.1rem;
+    }
+
+    .hw-puntero {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        width: 0;
+        height: 0;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-top: 26px solid #fff;
+        filter: drop-shadow(0 3px 6px rgba(0,0,0,.7));
+    }
+
+    .hw-ruleta {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 5px solid var(--hw-naranja);
+        box-shadow: 0 0 0 5px #120a1a, 0 0 35px rgba(255,122,24,.45), inset 0 0 25px rgba(0,0,0,.6);
+        transform: rotate(0deg);
+        will-change: transform;
+    }
+
+    .hw-ruleta.hw-girando {
+        transition: transform var(--hw-duracion, 5.5s) cubic-bezier(.12,.67,.1,1);
+    }
+
+    .hw-ruleta svg { display: block; width: 100%; height: 100%; border-radius: 50%; }
+    .hw-ruleta text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: 900;
+        font-size: 15px;
+        fill: #fff;
+        paint-order: stroke;
+        stroke: rgba(0,0,0,.55);
+        stroke-width: 3px;
+    }
+
+    .hw-centro {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 22%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: clamp(1.2rem, 5vw, 1.7rem);
+        background: radial-gradient(circle, #2a1442, #0b0711);
+        border: 3px solid var(--hw-naranja);
+        box-shadow: 0 0 14px rgba(255,122,24,.6);
+    }
+
+    /* ---------- Botones ---------- */
+
+    .hw-boton {
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        padding: .85rem 1.6rem;
+        border-radius: 999px;
+        font-size: 1rem;
+        font-weight: 900;
+        letter-spacing: .5px;
+        color: #140a1d;
+        background: linear-gradient(135deg, var(--hw-naranja-2), var(--hw-naranja));
+        box-shadow: 0 8px 24px rgba(255,122,24,.35);
+        transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+    .hw-boton:hover:not(:disabled) { transform: translateY(-2px) scale(1.03); box-shadow: 0 12px 30px rgba(255,122,24,.5); }
+    .hw-boton:disabled { opacity: .55; cursor: not-allowed; }
+    .hw-boton:focus-visible,
+    .hw-cerrar:focus-visible,
+    .hw-copiar:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+    .hw-boton--sec {
+        background: transparent;
+        color: var(--hw-naranja-2);
+        border: 2px solid var(--hw-naranja);
+        box-shadow: none;
+    }
+
+    /* ---------- Resultado ---------- */
+
+    .hw-resultado { margin-top: .4rem; animation: popupEntrada .4s ease both; }
+    .hw-resultado[hidden] { display: none; }
+
+    .hw-res-emoji { font-size: 2.6rem; line-height: 1; }
+
+    .hw-res-titulo {
+        margin: .35rem 0 .4rem;
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: var(--hw-naranja);
+    }
+
+    .hw-res-texto {
+        margin: 0 auto .9rem;
+        max-width: 36ch;
+        font-size: .95rem;
+        color: #e6dff0;
+    }
+
+    .hw-resultado--epico .hw-res-titulo {
+        font-size: 1.6rem;
+        color: #ffd36b;
+        text-shadow: 0 0 22px rgba(255,211,107,.7);
+        animation: hwBrillo 1.4s ease-in-out infinite alternate;
+    }
+    .hw-resultado--epico .hw-codigo { border-color: #ffd36b; box-shadow: 0 0 24px rgba(255,211,107,.45); }
+
+    @keyframes hwBrillo { from { filter: brightness(1); } to { filter: brightness(1.35); } }
+
+    .hw-codigo-wrap {
+        display: flex;
+        gap: .5rem;
+        align-items: stretch;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: .9rem;
+    }
+
+    .hw-codigo {
+        padding: .6rem 1rem;
+        border-radius: 12px;
+        border: 2px dashed var(--hw-naranja);
+        background: rgba(255,122,24,.1);
+        font-family: "Courier New", monospace;
+        font-size: 1.25rem;
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: #fff;
+        user-select: all;
+    }
+
+    .hw-copiar {
+        border: none;
+        cursor: pointer;
+        padding: 0 1rem;
+        border-radius: 12px;
+        font-weight: 800;
+        color: #fff;
+        background: var(--hw-morado);
+        transition: background .2s ease;
+    }
+    .hw-copiar:hover { background: #7a35c2; }
+
+    .hw-aviso {
+        margin-top: .8rem;
+        font-size: .72rem;
+        color: #9d93ad;
+    }
+
+    /* ---------- Banner flotante con temporizador ---------- */
+
+    .hw-banner {
+        position: fixed;
+        left: 18px;
+        bottom: 18px;
+        z-index: 8500;
+        width: min(420px, calc(100vw - 150px));
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        padding: .75rem .95rem;
+        border-radius: 16px;
+        color: #fff;
+        background: linear-gradient(135deg, rgba(27,8,48,.97), rgba(8,6,12,.97));
+        border: 1px solid var(--hw-naranja, #ff7a18);
+        box-shadow: 0 14px 40px rgba(0,0,0,.6), 0 0 28px rgba(255,122,24,.28);
+        animation: hwBannerEntrada .5s ease both;
+    }
+    .hw-banner[hidden] { display: none; }
+
+    @keyframes hwBannerEntrada {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hw-banner-icono { font-size: 1.8rem; animation: hwFlotar 3s ease-in-out infinite; }
+    .hw-banner-cuerpo { min-width: 0; flex: 1; }
+
+    .hw-banner-top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: .2rem .6rem;
+        font-size: .82rem;
+        font-weight: 800;
+    }
+    .hw-banner-top b { color: var(--hw-naranja-2, #ffa24d); }
+    .hw-banner-codigo {
+        font-family: "Courier New", monospace;
+        letter-spacing: 2px;
+        padding: .05rem .45rem;
+        border-radius: 6px;
+        background: rgba(255,122,24,.18);
+        border: 1px dashed var(--hw-naranja, #ff7a18);
+    }
+
+    .hw-reloj {
+        margin-top: .15rem;
+        font-family: "Courier New", monospace;
+        font-size: 1.25rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: #ffd36b;
+        font-variant-numeric: tabular-nums;
+    }
+    .hw-reloj.hw-urgente { color: #ff5a4d; animation: hwPulso 1s ease-in-out infinite; }
+
+    @keyframes hwPulso { 50% { opacity: .55; } }
+
+    .hw-urgencia {
+        margin-top: .1rem;
+        font-size: .72rem;
+        line-height: 1.3;
+        color: #d9cfe8;
+    }
+
+    .hw-banner-cerrar {
+        align-self: flex-start;
+        border: none;
+        background: transparent;
+        color: #b9aecb;
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .hw-banner-cerrar:hover { color: #fff; }
+
+    .hw-banner.hw-mini .hw-urgencia,
+    .hw-banner.hw-mini .hw-banner-top { display: none; }
+
+    @media (max-width: 600px) {
+        .hw-banner {
+            left: 10px;
+            right: 10px;
+            width: auto;
+            bottom: 66px;          /* deja libre el botón ⚙️ Admin */
+        }
+    }
+
+    /* ---------- Decoración extra: calabazas, esqueletos, zombis, murciélagos ---------- */
+
+    /* Posiciones de los adornos del header (la regla base está más arriba) */
+    body.halloween header .hw-deco--4 { right: 20%; bottom: 12%; animation: hwFlotar 6.5s .2s ease-in-out infinite; }
+    body.halloween header .hw-deco--5 { left: 26%;  top: 10%;   animation: hwFlotar 5.5s 1.1s ease-in-out infinite; }
+    body.halloween header .hw-deco--6 { right: 28%; top: 8%;    animation: hwFlotar 7.5s .6s ease-in-out infinite; }
+    body.halloween header .hw-deco--7 { left: 3%;   bottom: 10%; animation: hwFlotar 6s 1.4s ease-in-out infinite; }
+
+    /* Telarañas en las esquinas del header */
+    body.halloween header .hw-tela {
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        font-size: clamp(3rem, 9vw, 5.5rem);
+        line-height: 1;
+        opacity: .38;
+        filter: grayscale(1) brightness(1.6);
+    }
+    body.halloween header .hw-tela--izq { top: -6px; left: -4px; }
+    body.halloween header .hw-tela--der { top: -6px; right: -4px; transform: scaleX(-1); }
+    header .hw-tela, header .hw-arana { display: none; }
+    body.halloween header .hw-arana { display: block; }
+
+    /* Arañas colgando de un hilo */
+    body.halloween header .hw-arana {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        pointer-events: none;
+        font-size: 1.5rem;
+        transform-origin: top center;
+        animation: hwColgar 4s ease-in-out infinite;
+    }
+    body.halloween header .hw-arana::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 100%;
+        width: 1px;
+        height: var(--hilo, 40px);
+        background: rgba(255,255,255,.45);
+    }
+    body.halloween header .hw-arana--1 { left: 33%; margin-top: 46px; --hilo: 46px; }
+    body.halloween header .hw-arana--2 { right: 36%; margin-top: 70px; --hilo: 70px; animation-delay: -1.7s; }
+
+    @keyframes hwColgar {
+        0%, 100% { transform: rotate(-6deg); }
+        50%      { transform: rotate(6deg); }
+    }
+
+    /* Murciélagos cruzando la pantalla (decorativos, no bloquean clics) */
+    .hw-murcielagos {
+        position: fixed;
+        inset: 0;
+        z-index: 4;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    .hw-murcielagos span {
+        position: absolute;
+        left: -60px;
+        font-size: 1.7rem;
+        opacity: .55;
+        filter: drop-shadow(0 0 8px rgba(139,63,214,.8));
+        animation: hwVolar var(--dur, 22s) linear infinite;
+        animation-delay: var(--ret, 0s);
+    }
+    .hw-murcielagos span:nth-child(1) { top: 14%; --dur: 21s; --ret: 2s; }
+    .hw-murcielagos span:nth-child(2) { top: 34%; --dur: 27s; --ret: 9s;  font-size: 1.3rem; }
+    .hw-murcielagos span:nth-child(3) { top: 62%; --dur: 24s; --ret: 15s; font-size: 2rem; }
+
+    @keyframes hwVolar {
+        0%   { transform: translate(0, 0) scale(1); }
+        25%  { transform: translate(28vw, -30px) scale(1.15); }
+        50%  { transform: translate(55vw, 22px) scale(.9); }
+        75%  { transform: translate(82vw, -26px) scale(1.1); }
+        100% { transform: translate(112vw, 8px) scale(1); }
+    }
+
+    /* Títulos de sección con calabazas */
+    body.halloween .titulo-seccion h2::before { content: "🎃 "; }
+    body.halloween .titulo-seccion h2 { text-shadow: 0 0 18px rgba(255,122,24,.35); }
+    body.halloween .titulo-seccion h2::after { background: linear-gradient(90deg, #ff7a18, #8b3fd6); width: 80px; }
+    body.halloween .testimonios h2::before { content: "🧟 "; }
+
+    /* Tarjetas de producto: brillo naranja, telaraña en la esquina y badge de Halloween */
+    body.halloween .tarjeta-producto { border-color: rgba(255,122,24,.2); }
+    body.halloween .tarjeta-producto:hover {
+        border-color: rgba(255,122,24,.75);
+        box-shadow: 0 22px 55px rgba(0,0,0,.55), 0 0 28px rgba(255,122,24,.28);
+    }
+    body.halloween .tarjeta-producto::after {
+        content: "🕸️";
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        z-index: 7;
+        font-size: 1.5rem;
+        opacity: .75;
+        pointer-events: none;
+        filter: grayscale(1) brightness(1.8);
+    }
+    body.halloween .badge-producto {
+        background: linear-gradient(135deg, #5b2190, #3b1157);
+        border-color: rgba(255,122,24,.55);
+    }
+
+    /* Hero y beneficios */
+    body.halloween .hero-badge { border-color: rgba(255,122,24,.35); }
+    body.halloween .hero-card h3::before { content: "💀 "; }
+    body.halloween .beneficio-card h3::before { content: "🎃 "; }
+
+    /* Cementerio antes del footer */
+    .hw-cementerio {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        gap: .3rem;
+        margin-top: 3rem;
+        padding: 1.4rem .5rem 0;
+        font-size: clamp(1.7rem, 6vw, 3rem);
+        line-height: 1;
+        background: linear-gradient(180deg, transparent, rgba(91,33,144,.22));
+        border-bottom: 3px solid #ff7a18;
+        filter: drop-shadow(0 -4px 14px rgba(255,122,24,.25));
+        user-select: none;
+        overflow: hidden;
+    }
+    .hw-cementerio span { display: inline-block; animation: hwSaltito 3.2s ease-in-out infinite; }
+    .hw-cementerio span:nth-child(2n)  { animation-delay: -1s; }
+    .hw-cementerio span:nth-child(3n)  { animation-delay: -2.1s; }
+    .hw-cementerio ~ footer, body.halloween .hw-cementerio + footer { margin-top: 0; border-top-color: rgba(255,122,24,.5); }
+
+    @keyframes hwSaltito {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+    }
+
+    /* Precio con descuento dentro del modal de pedido */
+    .hw-precio-desc {
+        display: block;
+        margin-top: .25rem;
+        font-weight: 900;
+        color: #ff7a18;
+        text-shadow: 0 0 12px rgba(255,122,24,.5);
+    }
+    .hw-precio-tachado { text-decoration: line-through; opacity: .6; }
+
+    @media (max-width: 600px) {
+        body.halloween header .hw-deco--5,
+        body.halloween header .hw-deco--6 { display: none; }
+        body.halloween .tarjeta-producto::after { font-size: 1.2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hw-murcielagos span,
+        .hw-cementerio span,
+        body.halloween header .hw-arana,
+        body.halloween header .hw-deco { animation: none; }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+        .hw-ruleta.hw-girando { transition-duration: 1.2s; }
+        body.halloween header .hw-deco,
+        .hw-banner-icono,
+        .hw-resultado--epico .hw-res-titulo,
+        .hw-reloj.hw-urgente { animation: none; }
+    }
+
 </style>
 
 
@@ -1971,6 +2538,21 @@
                 </div>
                 <div class="admin-campo">
                     <label><input id="cfg-popup2-activo" type="checkbox"> Mostrar popup 2</label>
+                </div>
+            </div>
+
+            <h3 style="color:white;">🎃 Halloween · Dulce o Truco</h3>
+            <div class="admin-form-grid">
+                <div class="admin-campo full">
+                    <label><input id="cfg-halloween-activo" type="checkbox"> Campaña de Halloween activa (tema, ruleta y banner)</label>
+                </div>
+                <div class="admin-campo">
+                    <label for="cfg-halloween-inicio">Fecha de inicio</label>
+                    <input id="cfg-halloween-inicio" type="date">
+                </div>
+                <div class="admin-campo">
+                    <label for="cfg-halloween-fin">Fecha de fin (incluida)</label>
+                    <input id="cfg-halloween-fin" type="date">
                 </div>
             </div>
 
@@ -2784,6 +3366,9 @@
         popup1_activo: true,
         popup2_imagen: "https://i.postimg.cc/DfC2Y1vX/IMG-0296.jpg",
         popup2_activo: true,
+        halloween_activo: true,
+        halloween_inicio: "2026-10-01",
+        halloween_fin: "2026-11-02",
         footer_descripcion: "Jerseys premium para quienes viven el fútbol con estilo.",
         footer_entregas: ["CDMX", "Líneas 2, 3 y 5 del Metro", "Puntos de encuentro"],
         footer_horario: ["Lunes a sábado", "Sujeto a disponibilidad"],
@@ -3100,6 +3685,11 @@
         modalPrecio.textContent =
             "Precio: $" + precio + ".00";
 
+        // 🎃 Halloween: muestra el precio con el descuento ganado (si lo hay)
+        if (window.HalloweenDescuento) {
+            window.HalloweenDescuento.pintarEnModal(modalPrecio, Number(precio));
+        }
+
         modalDetalle.textContent =
             detalle;
 
@@ -3360,7 +3950,12 @@
             .replace(/{detalle}/g, detalle)
             .replace(/{comentarios}/g, comentarios || "Ninguno");
 
-        return mensaje;
+        // 🎃 Halloween: añade al mensaje el código y el precio con descuento (si lo hay)
+        const extraHalloween = window.HalloweenDescuento
+            ? window.HalloweenDescuento.textoMensaje(Number(precio), Number(cantidad))
+            : "";
+
+        return mensaje + extraHalloween;
 
     }
 
@@ -4020,6 +4615,9 @@
 
         const popup2Img = document.getElementById("popup2-imagen");
         if (popup2Img && c.popup2_imagen) popup2Img.src = c.popup2_imagen;
+
+        // 🎃 Halloween: pasa al módulo las fechas / el interruptor definidos en el panel admin
+        if (window.HalloweenCampana) window.HalloweenCampana.configurar(c);
     }
 
     function rellenarFormularioConfig() {
@@ -4056,6 +4654,10 @@
 
         setChecked("cfg-popup1-activo", c.popup1_activo);
         setChecked("cfg-popup2-activo", c.popup2_activo);
+
+        setChecked("cfg-halloween-activo", c.halloween_activo !== false);
+        set("cfg-halloween-inicio", c.halloween_inicio);
+        set("cfg-halloween-fin", c.halloween_fin);
 
         set("cfg-footer-descripcion", c.footer_descripcion);
         set("cfg-footer-entregas", (c.footer_entregas || []).join("\n"));
@@ -4125,6 +4727,13 @@
 
             nuevo.popup1_activo = document.getElementById("cfg-popup1-activo").checked;
             nuevo.popup2_activo = document.getElementById("cfg-popup2-activo").checked;
+
+            nuevo.halloween_activo = document.getElementById("cfg-halloween-activo").checked;
+            nuevo.halloween_inicio = document.getElementById("cfg-halloween-inicio").value;
+            nuevo.halloween_fin = document.getElementById("cfg-halloween-fin").value;
+            if (nuevo.halloween_inicio && nuevo.halloween_fin && nuevo.halloween_fin < nuevo.halloween_inicio) {
+                throw new Error("En Halloween, la fecha de fin no puede ser anterior a la de inicio.");
+            }
 
             nuevo.footer_descripcion = document.getElementById("cfg-footer-descripcion").value.trim();
             nuevo.footer_entregas = lineasDe(document.getElementById("cfg-footer-entregas").value);
@@ -4403,6 +5012,733 @@
             cargarConfiguracion();
         })
         .subscribe();
+})();
+</script>
+
+
+<!-- ==========================================================
+     🎃 DULCE O TRUCO · Ruleta de Halloween
+     (se muestra por JS tras el último anuncio; ver script al final)
+=========================================================== -->
+
+<div id="hw-overlay" class="hw-overlay" hidden>
+    <div class="hw-modal" role="dialog" aria-modal="true" aria-labelledby="hw-titulo" aria-describedby="hw-subtitulo">
+
+        <button type="button" id="hw-cerrar" class="hw-cerrar" aria-label="Cerrar ruleta">×</button>
+
+        <h2 id="hw-titulo" class="hw-titulo">🎃 ¡Dulce o Truco! 🎃</h2>
+        <p id="hw-subtitulo" class="hw-subtitulo">
+            Gira la ruleta embrujada de Báifo y descubre si las sombras te regalan un descuento.
+        </p>
+
+        <div class="hw-ruleta-wrap">
+            <div class="hw-puntero" aria-hidden="true"></div>
+            <div id="hw-ruleta" class="hw-ruleta" aria-hidden="true"></div>
+            <div class="hw-centro" aria-hidden="true">🦇</div>
+        </div>
+
+        <button type="button" id="hw-girar" class="hw-boton">¡GIRAR LA RULETA!</button>
+
+        <div id="hw-resultado" class="hw-resultado" role="status" aria-live="polite" hidden>
+            <div id="hw-res-emoji" class="hw-res-emoji"></div>
+            <h3 id="hw-res-titulo" class="hw-res-titulo"></h3>
+            <p id="hw-res-texto" class="hw-res-texto"></p>
+
+            <div id="hw-codigo-wrap" class="hw-codigo-wrap" hidden>
+                <span id="hw-codigo" class="hw-codigo"></span>
+                <button type="button" id="hw-copiar" class="hw-copiar">Copiar</button>
+            </div>
+
+            <button type="button" id="hw-seguir" class="hw-boton hw-boton--sec">Seguir explorando</button>
+            <p id="hw-aviso" class="hw-aviso" hidden>
+                Muestra este código al hacer tu pedido por WhatsApp. Válido por 24 horas desde que giraste.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<!-- Banner flotante con cuenta regresiva (solo si ganó descuento) -->
+<aside id="hw-banner" class="hw-banner" hidden aria-live="off">
+    <span class="hw-banner-icono" aria-hidden="true">🎃</span>
+    <div class="hw-banner-cuerpo">
+        <div class="hw-banner-top">
+            <b id="hw-banner-desc"></b>
+            <span>Código: <span id="hw-banner-codigo" class="hw-banner-codigo"></span></span>
+        </div>
+        <div id="hw-reloj" class="hw-reloj" role="timer" aria-label="Tiempo restante de tu descuento">24:00:00</div>
+        <div id="hw-urgencia" class="hw-urgencia"></div>
+    </div>
+    <button type="button" id="hw-banner-min" class="hw-banner-cerrar" aria-label="Minimizar banner" title="Minimizar">–</button>
+</aside>
+
+
+<!-- ==========================================================
+     🎃 DULCE O TRUCO · Lógica (JavaScript)
+=========================================================== -->
+<script>
+(function () {
+    "use strict";
+
+    /* ======================================================
+       1) CONFIGURACIÓN  (todo lo editable está aquí)
+    ====================================================== */
+
+    const HW = {
+        // Clave de LocalStorage. Cambia el sufijo (v1 → v2) para reiniciar la campaña a todos.
+        CLAVE: "baifo_halloween_ruleta_v1",
+
+        // Duración del descuento y del bloqueo de la ruleta (24 h).
+        DURACION_MS: 24 * 60 * 60 * 1000,
+
+        // Número de anuncios que deben cerrarse antes de mostrar la ruleta.
+        // Hoy el sitio tiene 2 popups (#popup-promocion y #popup-promocion-2); si
+        // hay menos anuncios que este número, la ruleta sale tras el último.
+        // Si añades un 3.er popup con la clase "popup-promocion", se cuenta solo.
+        ANUNCIOS_OBJETIVO: 3,
+
+        // Campaña activa solo en estas fechas (inclusive). Fuera de ellas no se muestra nada.
+        // Truco para pruebas: abre la página con ?halloween=1 (fuerza el tema y la ruleta)
+        // o con ?halloween=reset (borra el estado guardado y recarga).
+        // Estos valores son solo el RESPALDO: normalmente se cambian desde el panel
+        // admin → pestaña de contenido → "🎃 Halloween · Dulce o Truco".
+        ACTIVA: true,
+        FECHA_INICIO: "2026-10-01",
+        FECHA_FIN: "2026-11-02",
+
+        // Si ningún anuncio llega a mostrarse (p. ej. desactivados desde el panel admin),
+        // la ruleta aparece sola pasados estos milisegundos.
+        ESPERA_SIN_ANUNCIOS_MS: 2500,
+
+        // Premios. "peso" = probabilidad relativa TRUCADA (suman 100 → son porcentajes).
+        //   0%  → 80 %   (muy alta)
+        //   5%  → 17 %   (media-baja)
+        //   10% →  3 %   (muy baja)
+        // "segmentos" = cuántas porciones visuales ocupa en la rueda (solo estética:
+        // el resultado SIEMPRE lo decide "peso", la rueda solo se alinea con él).
+        PREMIOS: [
+            { id: "truco",  descuento: 0,  peso: 80, segmentos: 5, codigo: null },
+            { id: "dulce5", descuento: 5,  peso: 17, segmentos: 2, codigo: "TRUCO5" },
+            { id: "dulce10", descuento: 10, peso: 3,  segmentos: 1, codigo: "BRUJA10-VIP" }
+        ],
+
+        // Mensajes de urgencia (rotan en el banner)
+        URGENCIA: [
+            "¡No desaproveches tu descuento antes de que se esfume en las sombras!",
+            "¡El tiempo corre, úsalo ya!",
+            "Las sombras reclaman tu descuento… ¡aprovéchalo antes de medianoche!"
+        ]
+    };
+
+    // 0 % · frases de fútbol + terror
+    const FRASES_TRUCO = [
+        "El fantasma del VAR anuló tu descuento por fuera de lugar… 👻",
+        "Tu descuento se perdió en la prórroga de ultratumba. ⚰️",
+        "Un zombi cabeceó tu premio y lo mandó al cementerio. 🧟",
+        "El portero vampiro atajó tu descuento… ¡y se lo bebió! 🧛",
+        "Te sacaron tarjeta roja desde el más allá. ¡Truco! 🟥",
+        "La momia del árbitro pitó penal… ¡en tu contra! 🧻",
+        "Tu descuento quedó atrapado en el túnel de vestuarios embrujado. 🔦",
+        "El estadio de las almas en pena está de luto: hoy no hay gol de descuento. 🕯️",
+        "Una bruja te hizo una barrida por detrás y se llevó el premio. 🧹",
+        "Hasta el Hombre Lobo falló el penal esta noche. ¡Mejor suerte la próxima! 🐺"
+    ];
+
+    // 5 % · chistes cortos de Halloween
+    const CHISTES_DULCE5 = [
+        "¿Por qué los fantasmas no mienten? ¡Porque se les ve a través! 👻",
+        "¿Qué le dice un esqueleto a otro? «No tengo estómago para este partido.» 💀",
+        "¿Por qué la bruja ganó el partido? ¡Porque tenía la escoba como delantera! 🧹",
+        "¿Cómo se despide un vampiro? «¡Nos vemos en la próxima noche… de fútbol!» 🧛",
+        "¿Qué hace una calabaza en la cancha? ¡Cabecea con mucho estilo! 🎃"
+    ];
+
+    // 10 % · mensaje épico
+    const MENSAJE_EPICO = {
+        titulo: "¡LO LOGRASTE!",
+        texto: "Desde las profundidades del inframundo, el Rey Calabaza se inclina ante ti. " +
+               "Venciste a la maldición y conquistaste el descuento más codiciado de la noche. " +
+               "¡Tu leyenda quedará grabada en el Salón de la Fama de las sombras!"
+    };
+
+    /* ======================================================
+       2) UTILIDADES
+    ====================================================== */
+
+    const $ = (id) => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
+
+    // LocalStorage con respaldo en memoria (modo privado / almacenamiento bloqueado).
+    const memoria = {};
+    const Almacen = {
+        leer() {
+            try {
+                const crudo = localStorage.getItem(HW.CLAVE);
+                return crudo ? JSON.parse(crudo) : null;
+            } catch (e) {
+                return memoria[HW.CLAVE] || null;
+            }
+        },
+        guardar(valor) {
+            memoria[HW.CLAVE] = valor;
+            try { localStorage.setItem(HW.CLAVE, JSON.stringify(valor)); } catch (e) { /* sin almacenamiento */ }
+        },
+        borrar() {
+            delete memoria[HW.CLAVE];
+            try { localStorage.removeItem(HW.CLAVE); } catch (e) { /* sin almacenamiento */ }
+        }
+    };
+
+    /** Entero aleatorio criptográfico en [0, max). */
+    function aleatorio(max) {
+        if (window.crypto && crypto.getRandomValues) {
+            const buf = new Uint32Array(1);
+            crypto.getRandomValues(buf);
+            return buf[0] % max;
+        }
+        return Math.floor(Math.random() * max);
+    }
+
+    const elegir = (lista) => lista[aleatorio(lista.length)];
+    const pad = (n) => String(n).padStart(2, "0");
+
+    function campanaActiva() {
+        if (params.get("halloween") === "1") return true;
+        if (!HW.ACTIVA) return false;
+        const hoy = new Date();
+        const inicio = new Date(HW.FECHA_INICIO + "T00:00:00");
+        const fin = new Date(HW.FECHA_FIN + "T23:59:59");
+        return hoy >= inicio && hoy <= fin;
+    }
+
+    /* ======================================================
+       3) LÓGICA TRUCADA (selección ponderada)
+    ====================================================== */
+
+    function sortearPremio() {
+        const total = HW.PREMIOS.reduce((s, p) => s + p.peso, 0);
+        let tirada = aleatorio(total * 100) / 100;   // precisión de 2 decimales
+        for (const premio of HW.PREMIOS) {
+            if (tirada < premio.peso) return premio;
+            tirada -= premio.peso;
+        }
+        return HW.PREMIOS[0];
+    }
+
+    /* ======================================================
+       4) RULETA (SVG generado desde HW.PREMIOS)
+    ====================================================== */
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const COLORES = {
+        truco:   ["#1a1022", "#2b1a3a"],
+        dulce5:  ["#ff7a18"],
+        dulce10: ["#ffd36b"]
+    };
+    let segmentos = [];      // [{ premio, indice }]
+    let anguloActual = 0;
+
+    function construirSegmentos() {
+        // Reparte los segmentos intercalando premios para que la rueda se vea variada.
+        const cola = HW.PREMIOS.map(p => ({ premio: p, restantes: p.segmentos }));
+        segmentos = [];
+        while (cola.some(c => c.restantes > 0)) {
+            cola.sort((a, b) => b.restantes - a.restantes);
+            const c = cola[0];
+            segmentos.push({ premio: c.premio });
+            c.restantes--;
+            // evita dos iguales seguidos moviendo el siguiente mayor
+            if (segmentos.length > 1) {
+                const n = segmentos.length;
+                if (segmentos[n - 1].premio === segmentos[n - 2].premio) {
+                    const alt = cola.find(x => x.restantes > 0 && x.premio !== segmentos[n - 1].premio);
+                    if (alt) { alt.restantes--; segmentos.push({ premio: alt.premio }); }
+                }
+            }
+        }
+    }
+
+    function dibujarRuleta() {
+        construirSegmentos();
+        const n = segmentos.length;
+        const paso = 360 / n;
+        const R = 150;
+        const svg = document.createElementNS(SVG_NS, "svg");
+        svg.setAttribute("viewBox", "-150 -150 300 300");
+
+        const puntoPolar = (ang, r) => {
+            const rad = (ang - 90) * Math.PI / 180;   // 0° = arriba
+            return [Math.cos(rad) * r, Math.sin(rad) * r];
+        };
+
+        const contadorColor = {};
+        segmentos.forEach((seg, i) => {
+            const [x1, y1] = puntoPolar(i * paso, R);
+            const [x2, y2] = puntoPolar((i + 1) * paso, R);
+            const path = document.createElementNS(SVG_NS, "path");
+            path.setAttribute("d", `M0 0 L${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2} Z`);
+            const paleta = COLORES[seg.premio.id];
+            contadorColor[seg.premio.id] = (contadorColor[seg.premio.id] || 0) + 1;
+            path.setAttribute("fill", paleta[(contadorColor[seg.premio.id] - 1) % paleta.length]);
+            path.setAttribute("stroke", "#0b0711");
+            path.setAttribute("stroke-width", "2");
+            svg.appendChild(path);
+
+            const texto = document.createElementNS(SVG_NS, "text");
+            const [tx, ty] = puntoPolar(i * paso + paso / 2, R * 0.66);
+            texto.setAttribute("x", tx);
+            texto.setAttribute("y", ty);
+            texto.setAttribute("text-anchor", "middle");
+            texto.setAttribute("dominant-baseline", "middle");
+            texto.setAttribute("transform", `rotate(${i * paso + paso / 2} ${tx} ${ty})`);
+            texto.textContent = seg.premio.descuento === 0 ? "👻 TRUCO" : `🎃 ${seg.premio.descuento}%`;
+            svg.appendChild(texto);
+        });
+
+        const cont = $("hw-ruleta");
+        cont.innerHTML = "";
+        cont.appendChild(svg);
+    }
+
+    /** Gira hasta que el segmento "indice" quede bajo el puntero (arriba). */
+    function girarHasta(indice) {
+        const paso = 360 / segmentos.length;
+        const jitter = (aleatorio(1000) / 1000 - 0.5) * paso * 0.6;   // nunca cae en el borde
+        const centro = indice * paso + paso / 2;
+        const vueltas = 6 + aleatorio(3);                              // 6–8 vueltas completas
+        const base = Math.ceil(anguloActual / 360) * 360;
+        anguloActual = base + vueltas * 360 - centro + jitter;
+
+        const ruleta = $("hw-ruleta");
+        const reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        ruleta.style.setProperty("--hw-duracion", reducido ? "1.2s" : "5.5s");
+        ruleta.classList.add("hw-girando");
+        // forzar reflow para que la transición arranque siempre
+        void ruleta.offsetWidth;
+        ruleta.style.transform = `rotate(${anguloActual}deg)`;
+
+        return new Promise(resolver => {
+            let listo = false;
+            const fin = () => { if (!listo) { listo = true; resolver(); } };
+            ruleta.addEventListener("transitionend", fin, { once: true });
+            setTimeout(fin, (reducido ? 1.2 : 5.5) * 1000 + 400);   // red de seguridad
+        });
+    }
+
+    /* ======================================================
+       5) MODAL DE RESULTADO
+    ====================================================== */
+
+    function mostrarResultado(estado) {
+        const res = $("hw-resultado");
+        res.classList.remove("hw-resultado--epico");
+        const codigoWrap = $("hw-codigo-wrap");
+
+        if (estado.descuento === 0) {
+            $("hw-res-emoji").textContent = "💀";
+            $("hw-res-titulo").textContent = "¡TRUCO!";
+            $("hw-res-texto").textContent = estado.mensaje;
+            codigoWrap.hidden = true;
+            $("hw-aviso").hidden = true;
+        } else {
+            const epico = estado.descuento === 10;
+            res.classList.toggle("hw-resultado--epico", epico);
+            $("hw-res-emoji").textContent = epico ? "👑" : "🍬";
+            $("hw-res-titulo").textContent = epico
+                ? `${MENSAJE_EPICO.titulo} ${estado.descuento}% DE DESCUENTO`
+                : `¡DULCE! ${estado.descuento}% de descuento`;
+            $("hw-res-texto").textContent = estado.mensaje;
+            $("hw-codigo").textContent = estado.codigo;
+            codigoWrap.hidden = false;
+            $("hw-aviso").hidden = false;
+        }
+        res.hidden = false;
+        $("hw-girar").hidden = true;
+        $("hw-subtitulo").hidden = true;
+        $("hw-seguir").focus();
+    }
+
+    /* ======================================================
+       6) BANNER + TEMPORIZADOR REAL
+    ====================================================== */
+
+    let intervaloReloj = null;
+    let intervaloUrgencia = null;
+
+    function iniciarBanner(estado) {
+        const banner = $("hw-banner");
+        $("hw-banner-desc").textContent = `${estado.descuento}% OFF`;
+        $("hw-banner-codigo").textContent = estado.codigo;
+        banner.hidden = false;
+
+        // Mensaje de urgencia (rota cada 8 s)
+        let k = aleatorio(HW.URGENCIA.length);
+        $("hw-urgencia").textContent = HW.URGENCIA[k];
+        clearInterval(intervaloUrgencia);
+        intervaloUrgencia = setInterval(() => {
+            k = (k + 1) % HW.URGENCIA.length;
+            $("hw-urgencia").textContent = HW.URGENCIA[k];
+        }, 8000);
+
+        // Cuenta regresiva basada en la hora real (no se desfasa aunque la pestaña esté en segundo plano)
+        const reloj = $("hw-reloj");
+        function tick() {
+            const restante = estado.expira - Date.now();
+            if (restante <= 0) {
+                clearInterval(intervaloReloj);
+                clearInterval(intervaloUrgencia);
+                banner.hidden = true;
+                Almacen.borrar();    // terminó el periodo: se libera el bloqueo
+                return;
+            }
+            const h = Math.floor(restante / 3600000);
+            const m = Math.floor((restante % 3600000) / 60000);
+            const s = Math.floor((restante % 60000) / 1000);
+            reloj.textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+            reloj.classList.toggle("hw-urgente", restante < 3600000);   // última hora: rojo
+        }
+        tick();
+        clearInterval(intervaloReloj);
+        intervaloReloj = setInterval(tick, 1000);
+    }
+
+    /* ======================================================
+       7) FLUJO PRINCIPAL
+    ====================================================== */
+
+    let ruletaAbierta = false;
+    let girando = false;
+    let yaDisparada = false;
+    let focoPrevio = null;
+    let observadorGlobal = null;
+    let timerSinAnuncios = null;
+
+    /** ¿Hay un estado vigente (la ruleta ya se giró en las últimas 24 h)? */
+    function estadoVigente() {
+        const e = Almacen.leer();
+        if (e && typeof e.expira === "number" && e.expira > Date.now()) return e;
+        if (e) Almacen.borrar();       // caducado o dañado
+        return null;
+    }
+
+    function abrirRuleta() {
+        if (ruletaAbierta || estadoVigente()) return;   // jamás se reabre durante las 24 h
+        ruletaAbierta = true;
+        focoPrevio = document.activeElement;
+        dibujarRuleta();
+        $("hw-overlay").hidden = false;
+        $("hw-girar").focus();
+    }
+
+    function cerrarRuleta() {
+        if (girando) return;                            // no se cierra a mitad del giro
+        $("hw-overlay").hidden = true;
+        ruletaAbierta = false;
+        if (focoPrevio && focoPrevio.focus) focoPrevio.focus();
+    }
+
+    async function alGirar() {
+        if (girando || estadoVigente()) return;
+        girando = true;
+        $("hw-girar").disabled = true;
+        $("hw-cerrar").style.visibility = "hidden";
+
+        // 1) Decidir el premio (trucado) y 2) GUARDARLO ANTES de animar:
+        //    si el usuario recarga a mitad del giro, no puede volver a tirar.
+        const premio = sortearPremio();
+        const ahora = Date.now();
+        const estado = {
+            giroEn: ahora,
+            expira: ahora + HW.DURACION_MS,
+            premio: premio.id,
+            descuento: premio.descuento,
+            codigo: premio.codigo,
+            mensaje: premio.descuento === 0 ? elegir(FRASES_TRUCO)
+                   : premio.descuento === 5 ? elegir(CHISTES_DULCE5)
+                   : MENSAJE_EPICO.texto
+        };
+        Almacen.guardar(estado);
+
+        // 3) Animar hacia un segmento que corresponda al premio sorteado
+        const candidatos = segmentos
+            .map((s, i) => (s.premio === premio ? i : -1))
+            .filter(i => i >= 0);
+        await girarHasta(elegir(candidatos));
+
+        girando = false;
+        $("hw-cerrar").style.visibility = "visible";
+        mostrarResultado(estado);
+        if (estado.descuento > 0) iniciarBanner(estado);
+    }
+
+    /* ======================================================
+       8) DISPARADOR: tras cerrar el último anuncio
+    ====================================================== */
+
+    function iniciarDisparador() {
+        const anuncios = Array.from(document.querySelectorAll(".popup-promocion"));
+        const visible = (el) => !el.classList.contains("oculto");
+        const hayAnuncioVisible = () => anuncios.some(visible);
+
+        const objetivo = Math.min(HW.ANUNCIOS_OBJETIVO, anuncios.length);
+        let vistos = 0;              // anuncios que se mostraron
+        let cerrados = 0;            // anuncios que el usuario ya cerró
+        const estabaVisible = new Map(anuncios.map(a => [a, visible(a)]));
+        anuncios.forEach(a => { if (visible(a)) vistos++; });
+
+        function disparar() {
+            if (yaDisparada) return;
+            yaDisparada = true;
+            observador.disconnect();
+            // pequeña pausa para que el último popup termine de cerrarse
+            setTimeout(abrirRuleta, 350);
+        }
+
+        // Observa el cambio de clase "oculto" en cada popup (no toca tu lógica existente).
+        const observador = new MutationObserver(() => {
+            anuncios.forEach(a => {
+                const ahoraVisible = visible(a);
+                if (ahoraVisible && !estabaVisible.get(a)) vistos++;
+                if (!ahoraVisible && estabaVisible.get(a)) cerrados++;
+                estabaVisible.set(a, ahoraVisible);
+            });
+            // Disparo: todos los anuncios previstos ya se cerraron y no queda ninguno abierto.
+            if (cerrados >= objetivo && !hayAnuncioVisible()) disparar();
+            // Caso en que el flujo termina antes (p. ej. popup 2 desactivado):
+            else if (cerrados > 0 && vistos > 0 && !hayAnuncioVisible()) {
+                // dejamos un instante por si el cierre del 1.º abre el 2.º
+                setTimeout(() => {
+                    if (!yaDisparada && !hayAnuncioVisible()) disparar();
+                }, 600);
+            }
+        });
+        anuncios.forEach(a => observador.observe(a, { attributes: true, attributeFilter: ["class"] }));
+        observadorGlobal = observador;
+
+        // Respaldo: si no hay ningún anuncio visible (desactivados en el admin), sale solo.
+        clearTimeout(timerSinAnuncios);
+        timerSinAnuncios = setTimeout(() => {
+            if (!yaDisparada && vistos === 0 && !hayAnuncioVisible()) disparar();
+        }, HW.ESPERA_SIN_ANUNCIOS_MS);
+    }
+
+    /* ======================================================
+       API PÚBLICA: la usa el flujo de pedido (WhatsApp / Instagram)
+       para aplicar y añadir el descuento ganado al mensaje.
+    ====================================================== */
+
+    const dinero = (n) => "$" + n.toFixed(2);
+
+    window.HalloweenDescuento = {
+        /** Devuelve { descuento, codigo, expira } si hay un descuento vigente; si no, null. */
+        activo() {
+            const e = estadoVigente();
+            return e && e.descuento > 0 ? e : null;
+        },
+
+        /** Muestra en el modal de pedido el precio con descuento (en naranja). */
+        pintarEnModal(elPrecio, precio) {
+            if (!elPrecio) return;
+            let nota = document.getElementById("hw-precio-desc");
+            const e = this.activo();
+            if (!e || !isFinite(precio)) {
+                if (nota) nota.remove();
+                elPrecio.classList.remove("hw-precio-tachado");
+                return;
+            }
+            if (!nota) {
+                nota = document.createElement("span");
+                nota.id = "hw-precio-desc";
+                nota.className = "hw-precio-desc";
+                elPrecio.insertAdjacentElement("afterend", nota);
+            }
+            elPrecio.classList.add("hw-precio-tachado");
+            nota.textContent = `🎃 Descuento Halloween -${e.descuento}%: ${dinero(precio * (1 - e.descuento / 100))} (código ${e.codigo})`;
+        },
+
+        /** Bloque de texto que se añade al final del mensaje de pedido ("" si no hay descuento). */
+        textoMensaje(precio, cantidad) {
+            const e = this.activo();
+            if (!e) return "";
+            const unidades = Number.isInteger(cantidad) && cantidad > 0 ? cantidad : 1;
+            const conDesc = isFinite(precio) ? precio * (1 - e.descuento / 100) : null;
+            const hasta = new Date(e.expira).toLocaleString("es-MX", { dateStyle: "short", timeStyle: "short" });
+            let t = `\n\n🎃 DESCUENTO HALLOWEEN 🎃\n🏷️ Código: ${e.codigo} (${e.descuento}% OFF)`;
+            if (conDesc !== null) {
+                t += `\n💸 Precio con descuento: ${dinero(conDesc)} por pieza`;
+                if (unidades > 1) t += ` (${dinero(conDesc * unidades)} por ${unidades})`;
+                t += `\n(El estampado se cobra aparte, sin descuento)`;
+            }
+            t += `\n⏳ Válido hasta: ${hasta}`;
+            return t;
+        }
+    };
+
+    /* ======================================================
+       9) ARRANQUE
+    ====================================================== */
+
+    /* ======================================================
+       ARRANQUE y control desde el panel admin
+       - El sitio llama a HalloweenCampana.configurar(CONFIG) cada vez que carga
+         o guarda la configuración (activo / fecha de inicio / fecha de fin).
+       - Si cambias las fechas o apagas la campaña, el tema, la ruleta y el banner
+         se encienden o se quitan al instante, sin recargar.
+    ====================================================== */
+
+    let montado = false;      // eventos ya enlazados (se hace una sola vez)
+    let campanaOn = false;    // ¿tema/ruleta encendidos ahora mismo?
+    let configurado = false;  // ¿ya llegó la configuración del sitio?
+    let abortado = false;     // ?halloween=reset en curso
+
+    const esFechaValida = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(new Date(v + "T00:00:00"));
+    const cuandoListo = (fn) => document.readyState === "loading"
+        ? document.addEventListener("DOMContentLoaded", fn, { once: true })
+        : fn();
+
+    function montarEventos() {
+        if (montado) return;
+        montado = true;
+
+        $("hw-girar").addEventListener("click", alGirar);
+        $("hw-cerrar").addEventListener("click", cerrarRuleta);
+        $("hw-seguir").addEventListener("click", cerrarRuleta);
+        $("hw-overlay").addEventListener("click", (e) => { if (e.target === $("hw-overlay")) cerrarRuleta(); });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && ruletaAbierta) cerrarRuleta();
+            // Trampa de foco dentro del modal
+            if (e.key === "Tab" && ruletaAbierta) {
+                const foco = Array.from($("hw-overlay").querySelectorAll("button:not([disabled])"))
+                    .filter(b => b.offsetParent !== null && b.style.visibility !== "hidden");
+                if (!foco.length) return;
+                const primero = foco[0], ultimo = foco[foco.length - 1];
+                if (e.shiftKey && document.activeElement === primero) { e.preventDefault(); ultimo.focus(); }
+                else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
+            }
+        });
+
+        $("hw-copiar").addEventListener("click", async () => {
+            const codigo = $("hw-codigo").textContent;
+            try {
+                await navigator.clipboard.writeText(codigo);
+                $("hw-copiar").textContent = "¡Copiado!";
+            } catch (e) {
+                const rango = document.createRange();
+                rango.selectNodeContents($("hw-codigo"));
+                const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rango);
+                $("hw-copiar").textContent = "Selecciona y copia";
+            }
+            setTimeout(() => { $("hw-copiar").textContent = "Copiar"; }, 1800);
+        });
+
+        $("hw-banner-min").addEventListener("click", () => {
+            const mini = $("hw-banner").classList.toggle("hw-mini");
+            $("hw-banner-min").textContent = mini ? "+" : "–";
+            $("hw-banner-min").setAttribute("aria-label", mini ? "Expandir banner" : "Minimizar banner");
+        });
+
+    }
+
+    function activar() {
+        montarEventos();
+
+        // Tema Halloween + adornos del header
+        document.body.classList.add("halloween");
+        const header = document.querySelector("header");
+        if (header && !header.querySelector(".hw-deco")) {
+            const crear = (clase, emoji) => {
+                const s = document.createElement("span");
+                s.className = clase;
+                s.setAttribute("aria-hidden", "true");
+                s.textContent = emoji;
+                header.appendChild(s);
+            };
+            // Calabazas, murciélagos, esqueletos, zombis, fantasmas…
+            ["🎃", "🦇", "💀", "🧟", "👻", "☠️", "🎃"].forEach((e, i) => crear(`hw-deco hw-deco--${i + 1}`, e));
+            // Telarañas en las esquinas y arañas colgando
+            crear("hw-tela hw-tela--izq", "🕸️");
+            crear("hw-tela hw-tela--der", "🕸️");
+            crear("hw-arana hw-arana--1", "🕷️");
+            crear("hw-arana hw-arana--2", "🕷️");
+        }
+
+        // Murciélagos que cruzan la pantalla
+        if (!document.querySelector(".hw-murcielagos")) {
+            const capa = document.createElement("div");
+            capa.className = "hw-murcielagos";
+            capa.setAttribute("aria-hidden", "true");
+            capa.innerHTML = "<span>🦇</span><span>🦇</span><span>🦇</span>";
+            document.body.appendChild(capa);
+        }
+
+        // Cementerio (calabazas, esqueletos y zombis) justo antes del footer
+        const pie = document.querySelector("footer");
+        if (pie && !document.querySelector(".hw-cementerio")) {
+            const cem = document.createElement("div");
+            cem.className = "hw-cementerio";
+            cem.setAttribute("aria-hidden", "true");
+            cem.innerHTML = ["🪦", "🧟", "💀", "🎃", "🧟‍♀️", "☠️", "🪦", "🎃", "💀", "🧟", "🎃", "🪦"]
+                .map(e => `<span>${e}</span>`).join("");
+            pie.parentNode.insertBefore(cem, pie);
+        }
+
+        // ¿Ya giró? → nunca más ruleta durante 24 h; si ganó, se restaura el banner con el tiempo restante.
+        const previo = estadoVigente();
+        if (previo) {
+            yaDisparada = true;
+            if (previo.descuento > 0) iniciarBanner(previo);
+            return;
+        }
+
+        yaDisparada = false;
+        iniciarDisparador();
+    }
+
+    function desactivar() {
+        if (observadorGlobal) observadorGlobal.disconnect();
+        clearTimeout(timerSinAnuncios);
+        clearInterval(intervaloReloj);
+        clearInterval(intervaloUrgencia);
+        document.body.classList.remove("halloween");
+        document.querySelectorAll(".hw-deco, .hw-tela, .hw-arana, .hw-murcielagos, .hw-cementerio")
+            .forEach(n => n.remove());
+        $("hw-overlay").hidden = true;
+        $("hw-banner").hidden = true;
+        ruletaAbierta = false;
+    }
+
+    function aplicarCampana() {
+        if (abortado) return;
+        const debe = campanaActiva();
+        if (debe === campanaOn) return;     // nada cambió
+        campanaOn = debe;
+        if (debe) activar(); else desactivar();
+    }
+
+    window.HalloweenCampana = {
+        /** Recibe la configuración del sitio (halloween_activo, halloween_inicio, halloween_fin). */
+        configurar(cfg) {
+            if (cfg) {
+                HW.ACTIVA = cfg.halloween_activo !== false;
+                if (esFechaValida(cfg.halloween_inicio)) HW.FECHA_INICIO = cfg.halloween_inicio;
+                if (esFechaValida(cfg.halloween_fin)) HW.FECHA_FIN = cfg.halloween_fin;
+            }
+            configurado = true;
+            cuandoListo(aplicarCampana);
+        }
+    };
+
+    // ?halloween=reset → borra el estado guardado y recarga limpio
+    if (params.get("halloween") === "reset") {
+        abortado = true;
+        Almacen.borrar();
+        location.replace(location.pathname);
+    } else {
+        // Respaldo: si la configuración del sitio no llega (error de red), se usan los valores de HW.
+        setTimeout(() => {
+            if (!configurado) { configurado = true; cuandoListo(aplicarCampana); }
+        }, 4000);
+    }
 })();
 </script>
 
